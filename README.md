@@ -4,10 +4,5 @@
  Requirements:
 
  feedparser - pip3 install feedparser
- pretty print - from pprint import pprint
  
- maybe need?:
 
- MySQL - pip install mysqlclient
- flask - pip install flask
- SQLAlchemy - pip install SQLAlchemy
