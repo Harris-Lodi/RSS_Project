@@ -62,6 +62,60 @@ def feed(FeedList, keyindex):
 
     print(entry_detail)
 
+def hyperreference(FeedList, keyindex):
+
+    output_entry = FeedList[keyindex]
+
+    print(output_entry)
+
+def status(FeedList, keyindex):
+
+    output_entry = FeedList[keyindex]
+
+    print(output_entry)
+
+def namespaces(FeedList, keyindex):
+
+    output_entry = FeedList[keyindex]
+
+    print(output_entry)
+
+def bozo(FeedList, keyindex):
+
+    output_entry = FeedList[keyindex]
+
+    print(output_entry)
+
+def feed_etag(FeedList, keyindex):
+
+    output_entry = FeedList[keyindex]
+
+    print(output_entry)
+
+def headers(FeedList, keyindex):
+
+    output_entry = FeedList[keyindex]
+
+    print(output_entry)
+
+def last_updated(FeedList, keyindex):
+
+    output_entry = FeedList[keyindex]
+
+    print(output_entry)
+
+def feed_encoding(FeedList, keyindex):
+
+    output_entry = FeedList[keyindex]
+
+    print(output_entry)
+
+def feed_version(FeedList, keyindex):
+
+    output_entry = FeedList[keyindex]
+
+    print(output_entry)
+
 def find_url_tags():
 
     FeedList = list(NewsFeed.values())
@@ -83,6 +137,24 @@ def find_url_tags():
         feed(FeedList, keyindex)
     elif keyforuse == useful_key[keyindex] == "entries":
         entries(FeedList, keyindex)
+    elif keyforuse == useful_key[keyindex] == "href":
+        hyperreference(FeedList, keyindex)
+    elif keyforuse == useful_key[keyindex] == "status":
+        status(FeedList, keyindex)
+    elif keyforuse == useful_key[keyindex] == "namespaces":
+        namespaces(FeedList, keyindex)
+    elif keyforuse == useful_key[keyindex] == "updated":
+        last_updated(FeedList, keyindex)
+    elif keyforuse == useful_key[keyindex] == "version":
+        feed_version(FeedList, keyindex)
+    elif keyforuse == useful_key[keyindex] == "headers":
+        headers(FeedList, keyindex)
+    elif keyforuse == useful_key[keyindex] == "bozo":
+        bozo(FeedList, keyindex)
+    elif keyforuse == useful_key[keyindex] == "etag":
+        feed_etag(FeedList, keyindex)
+    elif keyforuse == useful_key[keyindex] == "encoding":
+        feed_encoding(FeedList, keyindex)
     else:
         return "RSS Feed Read is done!"
 
