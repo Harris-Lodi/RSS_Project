@@ -2,10 +2,8 @@ import feedparser
 import os
 
 os.system('cls') # clears the terminal from code, use 'clear' on linux/Mac
-# https://lukesmith.xyz/rss.xml
-get_input = input("Please enter the URL of the RSS file to read: ")
 
-NewsFeed = feedparser.parse(get_input)
+get_input = ""
 # "href", "status", "namespaces", "updated", "version", "headers", "bozo", "etag", "encoding"
 simpletaglist = []
 
@@ -69,7 +67,7 @@ def simple(FeedList, keyindex):
     except:
         print(output_entry)
 
-def find_url_tags():
+def find_url_tags(NewsFeed):
 
     global simpletaglist
 
@@ -99,4 +97,17 @@ def find_url_tags():
 
     del simpletaglist[:]
 
-find_url_tags()
+def intro():
+
+    global get_input
+
+    print("Hello welcome to RSS Reader!")
+    print("____________________________________________________________________________")
+    # https://lukesmith.xyz/rss.xml
+    get_input = input("Please enter the URL of the RSS file to read: ")
+
+    NewsFeed = feedparser.parse(get_input)
+
+    find_url_tags(NewsFeed)
+
+intro()
