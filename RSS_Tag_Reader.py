@@ -1,30 +1,38 @@
+# region Imports and modules
+
 import feedparser
 import os
 
-os.system('cls') # clears the terminal from code, use 'clear' on linux/Mac
+# endregion
 
+# region stable variables
+
+NewsFeed = {}
+FeedList = []
 get_input = ""
+keyforuse = ""
+keyindex = 0
 # "href", "status", "namespaces", "updated", "version", "headers", "bozo", "etag", "encoding"
 simpletaglist = []
+
+# endregion
+
+# region functions
 
 def non_simple(FeedList, keyindex):
 
     entryindex = 0
-    print("\n")
-    entryindex = int(input("also please enter which entry you want to see, 0 for latest, -1 for oldest: "))
+    entryindex = int(input("Please enter which entry you want to see, 0 for latest, -1 for oldest: "))
     output_entry = FeedList[keyindex][entryindex]
     output_entry_keys = output_entry.keys()
     output_entry_values = output_entry.values()
     entry_keys = list(output_entry_keys)
     entry_values = list(output_entry_values)
 
-    print(output_entry)
-    print("\n")
     print("Keys found in entry: ")
-    print("\n")
     print(entry_keys)
-    print("\n")
     entry_use_key = input("Please enter the entry key you want to see: ")
+    print("\n")
 
     useful_subkeys = []
     for keys in output_entry_keys:
@@ -34,7 +42,7 @@ def non_simple(FeedList, keyindex):
 
     entry_detail = entry_values[subkey]
 
-    print(entry_detail)
+    return entry_detail
 
 def simple(FeedList, keyindex):
 
@@ -62,44 +70,44 @@ def simple(FeedList, keyindex):
 
         entry_detail = entry_values[subkey]
 
-        print(entry_detail)
+        return entry_detail
 
     except:
-        print(output_entry)
+        return output_entry
 
 def find_url_tags(NewsFeed):
 
     global simpletaglist
+    global FeedList
+    global keyindex
+    global keyforuse
 
     FeedList = list(NewsFeed.values())
 
     print("HTML Tags for in URL Feed: ")
-    useful_key = []
     for keys in NewsFeed.keys():
-        useful_key.append(keys)
+        simpletaglist.append(keys)
 
-    simpletaglist = useful_key.copy()
-    simpletaglist.remove("entries")
-    print(useful_key)
+    print(simpletaglist)
 
     print("\n")
     print("__________________________________________________________________")
     keyforuse = input("Please enter the key you want to access within RSS feed: ")
     print("\n")
-    keyindex = useful_key.index(keyforuse)
+    keyindex = simpletaglist.index(keyforuse)
 
-    if keyforuse == useful_key[keyindex] == "entries":
-        non_simple(FeedList, keyindex)
-    elif any(x == keyforuse for x in simpletaglist):
-        simple(FeedList, keyindex)
-    else:
-        return "RSS Feed Read is done!"
+    simpletaglist.remove("entries")
 
+def deltaglist():
+    global simpletaglist
     del simpletaglist[:]
 
 def intro():
 
     global get_input
+    global NewsFeed
+
+    os.system('cls') # clears the terminal from code, use 'clear' on linux/Mac
 
     print("Hello welcome to RSS Reader!")
     print("____________________________________________________________________________")
@@ -110,4 +118,19 @@ def intro():
 
     find_url_tags(NewsFeed)
 
+    if keyforuse == "entries":
+        print(non_simple(FeedList, keyindex))
+    elif any(x == keyforuse for x in simpletaglist):
+        print(simple(FeedList, keyindex))
+    else:
+        return "RSS Feed Read is done!"
+
+    deltaglist()
+
+# endregion
+
+# region execution
+
 intro()
+
+# endregion
