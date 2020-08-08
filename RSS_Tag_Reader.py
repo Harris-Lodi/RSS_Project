@@ -7,13 +7,19 @@ import os
 
 # region stable variables
 
+# dictionaries
 NewsFeed = {}
+
+# lists
 FeedList = []
+simpletaglist = [] # "href", "status", "namespaces", "updated", "version", "headers", "bozo", "etag", "encoding"
+
+# strings
 get_input = ""
 keyforuse = ""
+
+# ints
 keyindex = 0
-# "href", "status", "namespaces", "updated", "version", "headers", "bozo", "etag", "encoding"
-simpletaglist = []
 
 # endregion
 
@@ -54,8 +60,6 @@ def simple(FeedList, keyindex):
         entry_keys = list(output_entry_keys)
         entry_values = list(output_entry_values)
 
-        print(output_entry)
-        print("\n")
         print("Keys found in entry: ")
         print("\n")
         print(entry_keys)
@@ -98,6 +102,15 @@ def find_url_tags(NewsFeed):
 
     simpletaglist.remove("entries")
 
+def sorter():
+
+    if keyforuse == "entries":
+        print(non_simple(FeedList, keyindex))
+    elif any(x == keyforuse for x in simpletaglist):
+        print(simple(FeedList, keyindex))
+    else:
+        return "RSS Feed Read is done!"
+
 def deltaglist():
     global simpletaglist
     del simpletaglist[:]
@@ -118,12 +131,7 @@ def intro():
 
     find_url_tags(NewsFeed)
 
-    if keyforuse == "entries":
-        print(non_simple(FeedList, keyindex))
-    elif any(x == keyforuse for x in simpletaglist):
-        print(simple(FeedList, keyindex))
-    else:
-        return "RSS Feed Read is done!"
+    sorter()
 
     deltaglist()
 
