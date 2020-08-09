@@ -2,6 +2,7 @@
 
 import feedparser
 import os
+import json
 
 # endregion
 
@@ -9,7 +10,6 @@ import os
 
 # dictionaries
 NewsFeed = {}
-zero_level = {}
 first_level = {}
 second_level = {}
 
@@ -36,14 +36,18 @@ def non_simple(FeedList, keyindex):
     global function_type
 
     function_type = "non_simple"
+
     entryindex = 0
     entryindex = int(input("Please enter which entry you want to see, 0 for latest, -1 for oldest: "))
     output_entry = FeedList[keyindex]
+
     if isinstance(output_entry, dict):
         first_level = output_entry.copy()
+
     output_entry_2 = output_entry[entryindex]
     if isinstance(output_entry_2, dict):
         second_level = output_entry_2.copy()
+
     output_entry_keys = output_entry_2.keys()
     output_entry_values = output_entry_2.values()
     entry_keys = list(output_entry_keys)
@@ -105,11 +109,7 @@ def find_url_tags(NewsFeed):
     global FeedList
     global keyindex
     global keyforuse
-    global zero_level
 
-    if isinstance(NewsFeed, dict):
-        zero_level = NewsFeed.copy()
-    
     FeedList = list(NewsFeed.values())
 
     print("HTML Tags for in URL Feed: ")
@@ -143,18 +143,37 @@ def debug_dict():
 
     print("____________________________________________")
     print("\n")
-    if bool(zero_level):
+    if bool(NewsFeed):
         print("First level keys: ")
-        print(zero_level.keys())
+        print(NewsFeed.keys())
+        write_basic_json(NewsFeed, "NewsFeed.json")
         print("\n")
         if bool(first_level):
             print("Second level keys: ")
             print(first_level.keys())
+            write_json(first_level, "level_one.json")
         elif bool(second_level):
             print("Third Level keys: ")
             print(second_level.keys())
+            write_json(second_level, "level_two.json")
         else:
             print("Dictionary is empty on all levels except zero(First level)!")
+    
+    # empty function_type string var
+    function_type = ""
+
+def write_json(data, name):
+
+    filename = name
+    with open (filename, "w") as f:
+        json.dump(data, f, indent=4, default=str)
+
+def write_basic_json(data, name):
+
+    data.pop("bozo_exception", None)
+
+    with open(name, 'w') as fp:
+        json.dump(data, fp, indent=4)
 
 def intro():
 
