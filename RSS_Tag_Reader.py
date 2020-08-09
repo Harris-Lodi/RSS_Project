@@ -9,6 +9,9 @@ import os
 
 # dictionaries
 NewsFeed = {}
+zero_level = {}
+first_level = {}
+second_level = {}
 
 # lists
 FeedList = []
@@ -17,6 +20,7 @@ simpletaglist = [] # "href", "status", "namespaces", "updated", "version", "head
 # strings
 get_input = ""
 keyforuse = ""
+function_type = ""
 
 # ints
 keyindex = 0
@@ -27,11 +31,21 @@ keyindex = 0
 
 def non_simple(FeedList, keyindex):
 
+    global first_level
+    global second_level
+    global function_type
+
+    function_type = "non_simple"
     entryindex = 0
     entryindex = int(input("Please enter which entry you want to see, 0 for latest, -1 for oldest: "))
-    output_entry = FeedList[keyindex][entryindex]
-    output_entry_keys = output_entry.keys()
-    output_entry_values = output_entry.values()
+    output_entry = FeedList[keyindex]
+    if isinstance(output_entry, dict):
+        first_level = output_entry.copy()
+    output_entry_2 = output_entry[entryindex]
+    if isinstance(output_entry_2, dict):
+        second_level = output_entry_2.copy()
+    output_entry_keys = output_entry_2.keys()
+    output_entry_values = output_entry_2.values()
     entry_keys = list(output_entry_keys)
     entry_values = list(output_entry_values)
 
@@ -52,7 +66,13 @@ def non_simple(FeedList, keyindex):
 
 def simple(FeedList, keyindex):
 
+    global first_level
+    global function_type
+
+    function_type = "simple"
     output_entry = FeedList[keyindex]
+    if isinstance(output_entry, dict):
+        first_level = output_entry.copy()
 
     try:
         output_entry_keys = output_entry.keys()
@@ -85,7 +105,11 @@ def find_url_tags(NewsFeed):
     global FeedList
     global keyindex
     global keyforuse
+    global zero_level
 
+    if isinstance(NewsFeed, dict):
+        zero_level = NewsFeed.copy()
+    
     FeedList = list(NewsFeed.values())
 
     print("HTML Tags for in URL Feed: ")
@@ -115,6 +139,23 @@ def deltaglist():
     global simpletaglist
     del simpletaglist[:]
 
+def debug_dict():
+
+    print("____________________________________________")
+    print("\n")
+    if bool(zero_level):
+        print("First level keys: ")
+        print(zero_level.keys())
+        print("\n")
+        if bool(first_level):
+            print("Second level keys: ")
+            print(first_level.keys())
+        elif bool(second_level):
+            print("Third Level keys: ")
+            print(second_level.keys())
+        else:
+            print("Dictionary is empty on all levels except zero(First level)!")
+
 def intro():
 
     global get_input
@@ -134,6 +175,8 @@ def intro():
     sorter()
 
     deltaglist()
+
+    debug_dict()
 
 # endregion
 
