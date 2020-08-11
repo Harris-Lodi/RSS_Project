@@ -151,28 +151,49 @@ def debug_dict():
         if bool(first_level):
             print("Second level keys: ")
             print(first_level.keys())
-            write_json(first_level, "level_one.json")
+            write_json_one(first_level, "level_one.json")
         elif bool(second_level):
             print("Third Level keys: ")
             print(second_level.keys())
-            write_json(second_level, "level_two.json")
+            write_json_two(second_level, "level_two.json")
         else:
             print("Dictionary is empty on all levels except zero(First level)!")
     
     # empty function_type string var
     function_type = ""
 
-def write_json(data, name):
+def write_json_one(data, name):
 
-    filename = name
-    with open (filename, "w") as f:
-        json.dump(data, f, indent=4, default=str)
+    if not os.path.isdir('Json_Files/'):
+        os.mkdir('Json_Files/')
+    
+    if os.path.isfile(f"Json_Files/{name}"):
+        with open (f"Json_Files/{name}", "r+") as f:
+            g = json.load(f)
+            g.update(data) 
+            f.seek(2)
+            json.dump(g, f, indent=4, default=str)     
+    else:
+        with open (f"Json_Files/{name}", "w") as f:
+            json.dump(data, f, indent=4, default=str)
+
+def write_json_two(data, name):
+
+    if not os.path.isdir('Json_Files/'):
+        os.mkdir('Json_Files/')
+         
+    else:
+        with open (f"Json_Files/{name}", "w") as f:
+            json.dump(data, f, indent=4, default=str)
 
 def write_basic_json(data, name):
 
     data.pop("bozo_exception", None)
 
-    with open(name, 'w') as fp:
+    if not os.path.isdir('Json_Files/'):
+        os.mkdir('Json_Files/')
+
+    with open(f"Json_Files/{name}", 'w') as fp:
         json.dump(data, fp, indent=4)
 
 def intro():
