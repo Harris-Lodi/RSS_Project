@@ -15,11 +15,13 @@ second_level = {}
 
 # lists
 FeedList = []
-simpletaglist = [] # "href", "status", "namespaces", "updated", "version", "headers", "bozo", "etag", "encoding"
+simpletaglist = [] 
 
 # strings
 get_input = ""
 keyforuse = ""
+simplekeytag = ""
+entrytitle = ""
 function_type = ""
 
 # ints
@@ -34,6 +36,7 @@ def non_simple(FeedList, keyindex):
     global first_level
     global second_level
     global function_type
+    global entrytitle
 
     function_type = "non_simple"
 
@@ -63,7 +66,9 @@ def non_simple(FeedList, keyindex):
         useful_subkeys.append(keys)
 
     subkey = useful_subkeys.index(entry_use_key)
+    subkey_title = useful_subkeys.index("title")
 
+    entrytitle = entry_values[subkey_title]
     entry_detail = entry_values[subkey]
 
     return entry_detail
@@ -72,6 +77,7 @@ def simple(FeedList, keyindex):
 
     global first_level
     global function_type
+    global simplekeytag
 
     function_type = "simple"
     output_entry = FeedList[keyindex]
@@ -89,6 +95,7 @@ def simple(FeedList, keyindex):
         print(entry_keys)
         print("\n")
         entry_use_key = input("Please enter the entry key you want to see: ")
+        simplekeytag = entry_use_key.copy()
 
         useful_subkeys = []
         for keys in output_entry_keys:
@@ -134,57 +141,45 @@ def sorter():
         print(simple(FeedList, keyindex))
     else:
         return "RSS Feed Read is done!"
+    
+    debug_dict(keyforuse, entrytitle)
 
 def deltaglist():
     global simpletaglist
     del simpletaglist[:]
 
-def debug_dict():
-
-    print("____________________________________________")
-    print("\n")
-    if bool(NewsFeed):
-        print("First level keys: ")
-        print(NewsFeed.keys())
-        write_basic_json(NewsFeed, "NewsFeed.json")
-        print("\n")
-        if bool(first_level):
-            print("Second level keys: ")
-            print(first_level.keys())
-            write_json_one(first_level, "level_one.json")
-        elif bool(second_level):
-            print("Third Level keys: ")
-            print(second_level.keys())
-            write_json_two(second_level, "level_two.json")
-        else:
-            print("Dictionary is empty on all levels except zero(First level)!")
-    
-    # empty function_type string var
-    function_type = ""
-
 def write_json_one(data, name):
+
+    count = 0
 
     if not os.path.isdir('Json_Files/'):
         os.mkdir('Json_Files/')
     
-    if os.path.isfile(f"Json_Files/{name}"):
-        with open (f"Json_Files/{name}", "r+") as f:
-            g = json.load(f)
-            g.update(data) 
-            f.seek(2)
-            json.dump(g, f, indent=4, default=str)     
+    if os.path.isfile(f"Json_Files/{name}.json"):
+        count += 1
+        with open (f"Json_Files/{name}_{count}.json", "w") as f:
+            json.dump(data, f, indent=4, default=str)     
     else:
-        with open (f"Json_Files/{name}", "w") as f:
+        count = 0
+        with open (f"Json_Files/{name}.json", "w") as f:
             json.dump(data, f, indent=4, default=str)
 
 def write_json_two(data, name):
+
+    count = 0
 
     if not os.path.isdir('Json_Files/'):
         os.mkdir('Json_Files/')
          
     else:
-        with open (f"Json_Files/{name}", "w") as f:
-            json.dump(data, f, indent=4, default=str)
+        if os.path.isfile(f"Json_Files/{name}.json"):
+            count += 1
+            with open (f"Json_Files/{name}_{count}.json", "w") as f:
+                json.dump(data, f, indent=4, default=str)     
+        else:
+            count = 0
+            with open (f"Json_Files/{name}.json", "w") as f:
+                json.dump(data, f, indent=4, default=str)
 
 def write_basic_json(data, name):
 
@@ -193,8 +188,33 @@ def write_basic_json(data, name):
     if not os.path.isdir('Json_Files/'):
         os.mkdir('Json_Files/')
 
-    with open(f"Json_Files/{name}", 'w') as fp:
+    with open(f"Json_Files/{name}.json", 'w') as fp:
         json.dump(data, fp, indent=4)
+
+def debug_dict(keyforuse, entrytitle):
+
+    print("____________________________________________")
+    print("\n")
+    if bool(NewsFeed):
+        print("First level keys: ")
+        print(NewsFeed.keys())
+        write_basic_json(NewsFeed, "RSS_Feed")
+        print("\n")
+        if bool(first_level):
+            print("Second level keys: ")
+            print(first_level.keys())
+            write_json_one(first_level, keyforuse)
+        elif bool(second_level):
+            print("Third Level keys: ")
+            print(second_level.keys())
+            write_json_two(second_level, entrytitle)
+        else:
+            print("Dictionary is empty on all levels except zero(First level)!")
+    
+    # empty function_type string var
+    function_type = ""
+    keyforuse = ""
+    entrytitle = ""
 
 def intro():
 
@@ -215,8 +235,6 @@ def intro():
     sorter()
 
     deltaglist()
-
-    debug_dict()
 
 # endregion
 
