@@ -248,16 +248,16 @@ def debug_dict(keyforuse, entrytitle):
     # and output availible keys for each dict
     if bool(NewsFeed):
         print("First level keys: ")
-        print(NewsFeed.keys())
+        # print(NewsFeed.keys())
         write_basic_json(NewsFeed, "RSS_Feed")
         print("\n")
         if bool(first_level):
             print("Second level keys: ")
-            print(first_level.keys())
+            # print(first_level.keys())
             write_json_one(first_level, keyforuse)
         elif bool(second_level):
             print("Third Level keys: ")
-            print(second_level.keys())
+            # print(second_level.keys())
             write_json_two(second_level, entrytitle)
         else:
             print("Dictionary is empty on all levels except zero(First level)!")
