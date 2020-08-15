@@ -4,6 +4,7 @@ import feedparser
 import os
 import json
 import re
+from datetime import datetime
 
 # endregion
 
@@ -17,6 +18,11 @@ second_level = {}
 # lists
 FeedList = []
 simpletaglist = [] 
+entryDates = []
+entryNames = []
+entryID = []
+entrySummaries = []
+entryLink = []
 
 # strings
 get_input = ""
@@ -175,11 +181,49 @@ def sorter():
     # debug for testing
     debug_dict(keyforuse, entrytitle)
 
+# function to save entries in sql file
+def save_entries(NewsFeed):
+
+    foundEntries = NewsFeed["entries"]
+
+    global entryDates
+    global entryNames
+    global entryID
+    global entrySummaries
+    global entryLink
+
+    for item in foundEntries:
+
+        entryDates.append(item["published"])
+        entryNames.append(item["title"])
+        entryID.append(item["id"])
+        entrySummaries.append(item["summary"])
+        entryLink.append(item["link"])
+
+    print("\n")
+    print(entryDates[1])
+    print(entryNames[1])
+    print(len(entryNames))
+    print(entryID[1])
+    print(entryLink[1])
+    print(entrySummaries[1])
+
 # clears lists
-def deltaglist():
+def delLists():
 
     global simpletaglist
+    global entryDates
+    global entryNames
+    global entryID
+    global entrySummaries
+    global entryLink
+
     del simpletaglist[:]
+    del entryDates[:]
+    del entryNames[:]
+    del entryID[:]
+    del entrySummaries[:]
+    del entryLink[:]
 
 # writes json file for non entries feeds
 def write_json_one(data, name):
@@ -247,16 +291,16 @@ def debug_dict(keyforuse, entrytitle):
     # then do the following to create json files for each dict
     # and output availible keys for each dict
     if bool(NewsFeed):
-        print("First level keys: ")
+        # print("First level keys: ")
         # print(NewsFeed.keys())
         write_basic_json(NewsFeed, "RSS_Feed")
         print("\n")
         if bool(first_level):
-            print("Second level keys: ")
+            # print("Second level keys: ")
             # print(first_level.keys())
             write_json_one(first_level, keyforuse)
         elif bool(second_level):
-            print("Third Level keys: ")
+            # print("Third Level keys: ")
             # print(second_level.keys())
             write_json_two(second_level, entrytitle)
         else:
@@ -294,9 +338,12 @@ def intro():
     # create a front end that does this via user request only
     sorter()
 
+    # save keys/value pairs in lists to be used in SQL table for all entries found
+    save_entries(NewsFeed)
+
     # delete lists that need to be clear after script is done running,
     # create a front end that does this via user request only
-    deltaglist()
+    delLists()
 
 # endregion
 
