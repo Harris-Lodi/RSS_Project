@@ -191,14 +191,19 @@ def save_entries(NewsFeed):
     global entryID
     global entrySummaries
     global entryLink
-
+    
     for item in foundEntries:
+
+        id = item["id"] 
 
         entryDates.append(item["published"])
         entryNames.append(item["title"])
-        entryID.append(item["id"])
+        entryID.append(id)
         entrySummaries.append(item["summary"])
-        entryLink.append(item["link"])
+        try:
+            entryLink.append(item["link"])
+        except KeyError:
+            print(f"the link key for item {id} was not found!")
 
     print("\n")
     print(entryDates[1])
@@ -249,21 +254,13 @@ def write_json_one(data, name):
 # writes json files for entries feeds only
 def write_json_two(data, name):
 
-    # counts the number of repeated file names
-    count = 0
-
     # if folder to store json_files is not found, create one
     if not os.path.isdir('Json_Files/'):
         os.mkdir('Json_Files/')
     
     # create json file if none exists, if there is already one with the same name
     # then create another json file with the value of count added to the name
-    if os.path.isfile(f"Json_Files/{name}.json"):
-        count += 1
-        with open (f"Json_Files/{name}_{count}.json", "w") as f:
-            json.dump(data, f, indent=4, default=str)     
-    else:
-        count = 0
+    if not os.path.isfile(f"Json_Files/{name}.json"):   
         with open (f"Json_Files/{name}.json", "w") as f:
             json.dump(data, f, indent=4, default=str)
 
