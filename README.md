@@ -5,6 +5,11 @@
 
  feedparser - pip3 install feedparser<br />
  pandas - pip3 install pandas<br />
+ sqlite3 - pip3 install pysqlite3<br />
+
+ <b>Debugging Tools</b><br />
+ 
+ sqlitebrowser - https://sqlitebrowser.org/<br />
 
  <b>Notes: </b><br />
  NewsFeed = feedparser.parse(get_input): gets html parsed data from input RSS url<br />

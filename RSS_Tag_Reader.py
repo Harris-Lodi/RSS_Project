@@ -4,11 +4,13 @@ import feedparser
 import os
 import json
 import re
+import sqlite3
 from datetime import datetime
 
 # endregion
 
 # region stable variables
+
 
 # dictionaries
 NewsFeed = {}
@@ -181,6 +183,36 @@ def sorter():
     # debug for testing
     debug_dict(keyforuse, entrytitle)
 
+# function to create database if not already made
+def createDatabase():
+
+    tableName = "Feed_Table"
+
+    #searches for database with name provided to connect to, if no db found, it will create one
+    conn = sqlite3.connect('Database.db')
+
+    # create cursor to edit and work the database
+    c = conn.cursor()
+
+    # create table, execute function launches parameter commands to database, 
+    # paranthesis in table name define the table dimensions and properties,
+    # IF NOT EXISTS should return null instead of errors if the table already exists
+    # also the string format matters alot to avoid syntax errors
+    c.execute("""CREATE TABLE IF NOT EXISTS Feed_table (
+        indx INTEGER, 
+        title TEXT, 
+        dates TEXT, 
+        summary TEXT,
+        id TEXT,
+        link TEXT
+        ) """)
+
+    # commit changes to database
+    conn.commit()
+
+    #close database connection
+    conn.close()
+
 # function to save entries in sql file
 def save_entries(NewsFeed):
 
@@ -205,13 +237,29 @@ def save_entries(NewsFeed):
         except KeyError:
             print(f"the link key for item {id} was not found!")
 
-    print("\n")
-    print(entryDates[1])
-    print(entryNames[1])
-    print(len(entryNames))
-    print(entryID[1])
-    print(entryLink[1])
-    print(entrySummaries[1])
+    # insert entries into sql table
+    for indx, element in enumerate(entryNames):
+
+        date = entryDates[indx]
+        summarize = entrySummaries[indx]
+        tagid = entryID[indx]
+        link = entryID[indx]
+
+        parameters = [indx, element, date, summarize, tagid, link]
+
+        # Create a database or connect to one
+        conn = sqlite3.connect('Database.db')
+        # Create cursor
+        c = conn.cursor()
+
+        # update table, insert data to table
+        c.execute("INSERT INTO Feed_table VALUES (?, ?, ?, ?, ?, ?)", parameters)
+
+        #Commit Changes
+        conn.commit()
+
+        # Close Connection 
+        conn.close()
 
 # clears lists
 def delLists():
@@ -347,5 +395,6 @@ def intro():
 # region execution
 
 intro()
+createDatabase()
 
 # endregion
