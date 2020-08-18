@@ -11,7 +11,6 @@ from datetime import datetime
 
 # region stable variables
 
-
 # dictionaries
 NewsFeed = {}
 first_level = {}
@@ -261,6 +260,55 @@ def save_entries(NewsFeed):
         # Close Connection 
         conn.close()
 
+# update table function
+def updateTable(orderID, _title, _date, _summary, _id, _link):
+
+    # Create a database or connect to one
+    conn = sqlite3.connect('Database.db')
+    # Create cursor
+    c = conn.cursor()
+
+    # update table, insert data to table
+    c.execute("""UPDATE Feed_table SET
+    title = :title,
+    dates = :date,
+    summary = :sum,
+    id = :id,
+    link = :link
+    WHERE indx = :tID""", 
+    {
+        'title': _title,
+        'date': _date,
+        'sum': _summary,
+        'id': _id,
+        'link': _link,
+        'tID': orderID
+    })
+
+    #Commit Changes
+    conn.commit()
+
+    # Close Connection 
+    conn.close()
+
+# delete query from record
+def deleteDatabaseEntry(orderID):
+
+	# Create a database or connect to one
+	conn = sqlite3.connect('Database.db')
+	# Create cursor
+	c = conn.cursor()
+
+	#delete a row from the table
+	entry = (orderID,)
+	c.execute("DELETE FROM Feed_table WHERE indx = ?;",entry)
+
+	#Commit Changes
+	conn.commit()
+
+	# Close Connection 
+	conn.close()
+
 # clears lists
 def delLists():
 
@@ -383,8 +431,13 @@ def intro():
     # create a front end that does this via user request only
     sorter()
 
+    createDatabase()
+
     # save keys/value pairs in lists to be used in SQL table for all entries found
     save_entries(NewsFeed)
+
+    # deleteDatabaseEntry(14)
+    updateTable(0, "hello", "hello", "hello", "hello", "hello")
 
     # delete lists that need to be clear after script is done running,
     # create a front end that does this via user request only
@@ -395,6 +448,5 @@ def intro():
 # region execution
 
 intro()
-createDatabase()
 
 # endregion
