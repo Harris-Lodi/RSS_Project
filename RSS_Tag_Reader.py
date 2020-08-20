@@ -183,9 +183,7 @@ def sorter():
     debug_dict(keyforuse, entrytitle)
 
 # function to create database if not already made
-def createDatabase():
-
-    tableName = "Feed_Table"
+def createDatabase(tableName):
 
     #searches for database with name provided to connect to, if no db found, it will create one
     conn = sqlite3.connect('Database.db')
@@ -197,7 +195,7 @@ def createDatabase():
     # paranthesis in table name define the table dimensions and properties,
     # IF NOT EXISTS should return null instead of errors if the table already exists
     # also the string format matters alot to avoid syntax errors
-    c.execute("""CREATE TABLE IF NOT EXISTS Feed_table (
+    c.execute(f"""CREATE TABLE IF NOT EXISTS {tableName} (
         indx INTEGER, 
         title TEXT, 
         dates TEXT, 
@@ -261,7 +259,7 @@ def save_entries(NewsFeed):
         conn.close()
 
 # update table function
-def updateTable(orderID, _title, _date, _summary, _id, _link):
+def updateTable(tableName, orderID, _title = None, _date = None, _summary = None, _id = None, _link = None):
 
     # Create a database or connect to one
     conn = sqlite3.connect('Database.db')
@@ -269,7 +267,7 @@ def updateTable(orderID, _title, _date, _summary, _id, _link):
     c = conn.cursor()
 
     # update table, insert data to table
-    c.execute("""UPDATE Feed_table SET
+    c.execute(f"""UPDATE {tableName} SET
     title = :title,
     dates = :date,
     summary = :sum,
@@ -431,13 +429,13 @@ def intro():
     # create a front end that does this via user request only
     sorter()
 
-    createDatabase()
+    createDatabase("Feed_Table")
 
     # save keys/value pairs in lists to be used in SQL table for all entries found
     save_entries(NewsFeed)
 
     # deleteDatabaseEntry(14)
-    updateTable(0, "hello", "hello", "hello", "hello", "hello")
+    updateTable("Feed_Table", 0, "hello", "hello", "hello")
 
     # delete lists that need to be clear after script is done running,
     # create a front end that does this via user request only
