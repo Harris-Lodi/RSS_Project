@@ -7,6 +7,10 @@
  pandas - pip3 install pandas<br />
  sqlite3 - pip3 install pysqlite3<br />
 
+ <b>Credits</b><br />
+
+ Icons made by Freepik from www.flaticon.com<br />
+
  <b>Debugging Tools</b><br />
  
  sqlitebrowser - https://sqlitebrowser.org/<br />
