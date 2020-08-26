@@ -23,7 +23,6 @@ root.title("RSS_Database_Reader!")
 
 # database view 
 
-# WHERE type='table'
 con = sqlite3.connect('Database.db')
 mycur = con.cursor() 
 mycur.execute("SELECT indx, title, dates, id FROM Feed_table ORDER BY indx;")
