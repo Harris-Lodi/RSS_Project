@@ -6,7 +6,6 @@
  feedparser - pip3 install feedparser<br />
  pandas - pip3 install pandas<br />
  sqlite3 - pip3 install pysqlite3<br />
- mysql.connector - pip3 install mysql-connector<br />
 
  <b>Credits</b><br />
 

@@ -3,8 +3,8 @@
 from tkinter import *
 import tkinter as tk 
 from tkinter import ttk
+import sqlite3
 # from RSS_Tag_Reader import *
-import mysql.connector
 
 # endregion
 
@@ -21,25 +21,35 @@ root.iconbitmap('Icons/RSS_Icon.ico')
 # change title on top bar
 root.title("RSS_Database_Reader!")
 
-# database view
-mydb = mysql.connector.connect(user="admin", password="pass", database="Database", host="localhost", auth_plugin="mysql_native_password")
-cursor = mydb.cursor()
+# database view 
 
-sql = "SELECT * FROM Feed_Table"
-cursor.execute(sql)
-rows = cursor.fetchall()
-total = cursor.rowcount
-print("Total Data Entries: " + str(total))
+# WHERE type='table'
+con = sqlite3.connect('Database.db')
+mycur = con.cursor() 
+mycur.execute("SELECT indx, title, dates, id FROM Feed_table ORDER BY indx;")
+rows = mycur.fetchall()
 
 frm = tk.Frame(root)
-frm.pack(side=tk.LEFT, padx=20)
+frm.pack(padx=5, pady=100)
 
-tv = ttk.Treeview(frm, columns=(1,2,3), show="headings", height="5")
+# style the output graph, style name is "Treeview" as defined in style.configure
+style = ttk.Style()
+style.configure(".", font=('Helvetica', 8), foreground="white")
+style.configure("Treeview", foreground='red')
+style.layout("Treeview", [("Treeview.treearea", {'sticky':'nswe'})])
+style.configure("Treeview.Heading", foreground='green', font='bold', stretch=tk.YES)
+
+tv = ttk.Treeview(frm, columns=(1,2,3,4), show="headings", height="20", style="Treeview")
 tv.pack()
 
-tv.heading(1, text="title")
-tv.heading(2, text="dates")
-tv.heading(3, text="id")
+tv.heading(1, text="Index")
+tv.column("1", minwidth=0, width=50, stretch=NO)
+tv.heading(2, text="Title")
+tv.column("2", minwidth=0, width=400, stretch=YES)
+tv.heading(3, text="Date")
+tv.column("3", minwidth=0, width=200, stretch=YES)
+tv.heading(4, text="Link")
+tv.column("4", minwidth=0, width=500, stretch=YES)
 
 for i in rows:
     tv.insert('', 'end', values = i)

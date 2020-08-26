@@ -429,10 +429,10 @@ def intro():
     # create a front end that does this via user request only
     sorter()
 
-    # createDatabase("Feed_Table")
+    createDatabase("Feed_Table")
 
     # save keys/value pairs in lists to be used in SQL table for all entries found
-    # save_entries(NewsFeed)
+    save_entries(NewsFeed)
 
     # deleteDatabaseEntry(14)
     # updateTable("Feed_Table", 0, "hello", "hello", "hello")
@@ -445,6 +445,6 @@ def intro():
 
 # region execution
 
-# intro()
+intro()
 
 # endregion
