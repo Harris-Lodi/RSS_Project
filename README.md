@@ -6,6 +6,7 @@
  feedparser - pip3 install feedparser<br />
  pandas - pip3 install pandas<br />
  sqlite3 - pip3 install pysqlite3<br />
+ pyperclip - pip install pyperclip<br />
 
  <b>Credits</b><br />
 
