@@ -5,7 +5,7 @@ import tkinter as tk
 from tkinter import ttk
 import sqlite3
 import pyperclip
-# from RSS_Tag_Reader import *
+from RSS_Tag_Reader import *
 
 # endregion
 
@@ -13,6 +13,8 @@ import pyperclip
 
 # GUI class to handle all GUI related code
 class GUI:
+
+    rowSelection = {}
 
     # init function to run upon class invoke
     def __init__(self):
@@ -33,6 +35,12 @@ class GUI:
 
         # run the GUI widget
         self.root.mainloop()
+    
+    def copy_info(self):
+
+        if self.rowSelection:
+            # save link from values to system clipboard
+            pyperclip.copy(self.tv.item(self.rowSelection)['values'][3])
 
     # function to create the GUI widget 
     def createWidget(self):
@@ -45,7 +53,10 @@ class GUI:
         self.rows = self.mycur.fetchall()
 
         self.frm = tk.Frame(self.root)
-        self.frm.pack(padx=5, pady=100)
+        self.frm.pack(padx = 5, pady = 100)
+
+        self.copyBtn = tk.Button(self.root, text="Copy URL", command=self.copy_info)
+        self.copyBtn.pack()
 
         # style the output graph, style name is "Treeview" as defined in style.configure
         self.style = ttk.Style()
@@ -66,7 +77,7 @@ class GUI:
         self.tv.heading(4, text="Link")
         self.tv.column("4", minwidth=0, width=500, stretch=YES)
 
-        self.tv.bind('<ButtonRelease-1>', self.select_item) 
+        self.tv.bind('<ButtonRelease-1>', self.select_item)
 
         for i in self.rows:
             self.tv.insert('', 'end', values = i)
@@ -74,15 +85,12 @@ class GUI:
     # function to read info from selected row from table, inputs include self and 'a'(event)
     def select_item(self, a):
 
-        test_str_library = self.tv.item(self.tv.selection())# gets all the values of the selected row
-        print('The test_str = ', type(test_str_library), test_str_library, '\n')  # prints a dictionay of the selected row
+        # test_str_library = self.tv.item(self.tv.selection())# gets all the values of the selected row
+        # print('The test_str = ', type(test_str_library), test_str_library, '\n')  # prints a dictionay of the selected row
+        # print('item clicked ', item) # variable that represents the row you clicked on
+        # print(self.tv.item(item)['values'][0]) # prints the first value of the values (the id value) 
         item = self.tv.selection()[0] # which row did you click on
-        print('item clicked ', item) # variable that represents the row you clicked on
-        print(self.tv.item(item)['values'][0]) # prints the first value of the values (the id value)
-
-        # save link from values to system clipboard
-        pyperclip.copy(self.tv.item(item)['values'][3])
-        
+        self.rowSelection = item    
 
 # endregion
 
@@ -90,6 +98,8 @@ class GUI:
 
 # execute code via main
 if __name__ == '__main__':
+
+    # intro()
 
     # invoke GUI class
     run = GUI()

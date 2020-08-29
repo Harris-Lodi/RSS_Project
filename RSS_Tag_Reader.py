@@ -442,9 +442,3 @@ def intro():
     delLists()
 
 # endregion
-
-# region execution
-
-intro()
-
-# endregion
