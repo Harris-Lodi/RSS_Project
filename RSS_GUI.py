@@ -30,20 +30,36 @@ class GUI:
         # change title on top bar
         self.root.title("RSS_Database_Reader!")
 
-        # create the GUI widget 
-        self.createWidget()
+        # make GUI
+
+        self.frm = tk.Frame(self.root)
+        self.frm.pack()
+
+        self.spaceFrame = tk.Label(self.frm, text="RSS Entries Viewer", relief=GROOVE, anchor=CENTER, font = 'Times 12 italic', bg = '#424242', fg = '#FFFFFF')
+        self.spaceFrame.grid(row = 0, column = 1, columnspan=5, pady = 10, ipadx = 10)
+
+        self.enterString = Entry(self.frm, width=90)
+        self.enterString.grid(row=4, column=2, columnspan=2, pady=5)
+
+        self.clearInput = tk.Button(self.frm, text="Clear Text", command=self.clearTextbox)
+        self.clearInput.grid(row=4, column=5, pady = 10)
+
+        self.enterString_label = Label(self.frm, text="Enter RSS URL and Strings:", bg = '#424242', fg = '#FFFFFF')
+        self.enterString_label.grid(row=4, column=1, pady=10)
+
+        self.inputURL = tk.Button(self.frm, text="Enter RSS URL", command=self.enterURL)
+        self.inputURL.grid(row=5, column=1, pady = 10)
+
+        self.cdbBtn = tk.Button(self.frm, text="Create DB", command=self.createDB)
+        self.cdbBtn.grid(row=5, column=2, pady = 10)
+
+        self.copyBtn = tk.Button(self.frm, text="Copy URL", command=self.copy_info)
+        self.copyBtn.grid(row=5, column=3, pady = 10)
 
         # run the GUI widget
         self.root.mainloop()
     
-    def copy_info(self):
-
-        if self.rowSelection:
-            # save link from values to system clipboard
-            pyperclip.copy(self.tv.item(self.rowSelection)['values'][3])
-
-    # function to create the GUI widget 
-    def createWidget(self):
+    def loadDB(self):
 
         # database view
 
@@ -51,12 +67,6 @@ class GUI:
         self.mycur = self.con.cursor() 
         self.mycur.execute("SELECT indx, title, dates, id FROM Feed_table ORDER BY indx;")
         self.rows = self.mycur.fetchall()
-
-        self.frm = tk.Frame(self.root)
-        self.frm.pack(padx = 5, pady = 100)
-
-        self.copyBtn = tk.Button(self.root, text="Copy URL", command=self.copy_info)
-        self.copyBtn.pack()
 
         # style the output graph, style name is "Treeview" as defined in style.configure
         self.style = ttk.Style()
@@ -66,7 +76,7 @@ class GUI:
         self.style.configure("Treeview.Heading", foreground='green', font='bold', stretch=tk.YES)
 
         self.tv = ttk.Treeview(self.frm, columns=(1,2,3,4), show="headings", height="20", style="Treeview")
-        self.tv.pack()
+        self.tv.grid(row=3, column=1, columnspan = 5)
 
         self.tv.heading(1, text="Index")
         self.tv.column("1", minwidth=0, width=50, stretch=NO)
@@ -81,7 +91,31 @@ class GUI:
 
         for i in self.rows:
             self.tv.insert('', 'end', values = i)
-    
+
+    def clearTextbox(self):
+
+        self.enterString.delete(0, END)
+
+    def copy_info(self):
+
+        if self.rowSelection:
+            # save link from values to system clipboard
+            pyperclip.copy(self.tv.item(self.rowSelection)['values'][3])
+
+    def createDB(self):
+
+        if not self.enterString.get() == "":
+
+            print(self.enterString.get())
+            createDatabase(self.enterString.get())
+            self.loadDB()
+
+    def enterURL(self):
+
+        if not self.enterString.get() == "":
+
+            intro(self.enterString.get())
+
     # function to read info from selected row from table, inputs include self and 'a'(event)
     def select_item(self, a):
 
@@ -98,8 +132,6 @@ class GUI:
 
 # execute code via main
 if __name__ == '__main__':
-
-    # intro()
 
     # invoke GUI class
     run = GUI()

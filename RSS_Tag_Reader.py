@@ -210,6 +210,10 @@ def createDatabase(tableName):
     #close database connection
     conn.close()
 
+    save_entries(NewsFeed)
+
+    delLists()
+
 # function to save entries in sql file
 def save_entries(NewsFeed):
 
@@ -403,7 +407,7 @@ def debug_dict(keyforuse, entrytitle):
     entrytitle = ""
 
 # starting function, need to change this for user input function with flask html
-def intro():
+def intro(url):
 
     # global variables
     global get_input
@@ -413,10 +417,11 @@ def intro():
     os.system('cls') # clears the terminal from code, use 'clear' on linux/Mac
 
     # get the RSS Feed URL from user
-    print("Hello welcome to RSS Reader!")
-    print("____________________________________________________________________________")
+    # print("Hello welcome to RSS Reader!")
+    # print("____________________________________________________________________________")
     # https://lukesmith.xyz/rss.xml
-    get_input = input("Please enter the URL of the RSS file to read: ")
+    # get_input = input("Please enter the URL of the RSS file to read: ")
+    get_input = url
 
     # feed parse the RSS url feed into a dictionary called NewsFeed
     NewsFeed = feedparser.parse(get_input)
@@ -429,16 +434,16 @@ def intro():
     # create a front end that does this via user request only
     sorter()
 
-    createDatabase("Feed_Table")
+    # createDatabase("Feed_Table")
 
     # save keys/value pairs in lists to be used in SQL table for all entries found
-    save_entries(NewsFeed)
+    # save_entries(NewsFeed)
 
     # deleteDatabaseEntry(14)
     # updateTable("Feed_Table", 0, "hello", "hello", "hello")
 
     # delete lists that need to be clear after script is done running,
     # create a front end that does this via user request only
-    delLists()
+    # delLists()
 
 # endregion
