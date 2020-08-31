@@ -140,7 +140,7 @@ def simple(FeedList, keyindex):
         return output_entry
 
 # takes RSS url and organizes tags for sorting in simpletaglist
-def find_url_tags(NewsFeed):
+def find_url_tags():
 
     # global vars
     global simpletaglist
@@ -151,22 +151,27 @@ def find_url_tags(NewsFeed):
     # convert values from Newsfeed into a list for use in output functions
     FeedList = list(NewsFeed.values())
 
+    # write json file for NewsFeed
+    write_basic_json(NewsFeed, "RSS_Feed")
+
     # store keys in simpletaglist and output them
-    print("HTML Tags for in URL Feed: ")
+    # print("HTML Tags for in URL Feed: ")
     for keys in NewsFeed.keys():
         simpletaglist.append(keys)
 
-    print(simpletaglist)
+    # print(simpletaglist)
 
     # ask user for which key they want to see, and store the input/index value of input
-    print("\n")
-    print("__________________________________________________________________")
-    keyforuse = input("Please enter the key you want to access within RSS feed: ")
-    print("\n")
-    keyindex = simpletaglist.index(keyforuse)
+    # print("\n")
+    # print("__________________________________________________________________")
+    # keyforuse = input("Please enter the key you want to access within RSS feed: ")
+    # print("\n")
+    # keyindex = simpletaglist.index(keyforuse)
 
     # remove entries from simple tag list to avoid double function call
     simpletaglist.remove("entries")
+
+    # sorter()
 
 # decided which function to use depending on selected key tag
 def sorter():
@@ -210,12 +215,10 @@ def createDatabase(tableName):
     #close database connection
     conn.close()
 
-    save_entries(NewsFeed)
-
-    delLists()
+    save_entries(NewsFeed, tableName)
 
 # function to save entries in sql file
-def save_entries(NewsFeed):
+def save_entries(NewsFeed, name):
 
     foundEntries = NewsFeed["entries"]
 
@@ -254,7 +257,7 @@ def save_entries(NewsFeed):
         c = conn.cursor()
 
         # update table, insert data to table
-        c.execute("INSERT INTO Feed_table VALUES (?, ?, ?, ?, ?, ?)", parameters)
+        c.execute(f"INSERT INTO {name} VALUES (?, ?, ?, ?, ?, ?)", parameters)
 
         #Commit Changes
         conn.commit()
@@ -388,7 +391,7 @@ def debug_dict(keyforuse, entrytitle):
     if bool(NewsFeed):
         # print("First level keys: ")
         # print(NewsFeed.keys())
-        write_basic_json(NewsFeed, "RSS_Feed")
+        # write_basic_json(NewsFeed, "RSS_Feed")
         print("\n")
         if bool(first_level):
             # print("Second level keys: ")
@@ -428,11 +431,11 @@ def intro(url):
 
     # Invoke the find url tags function with NewsFeed as input, 
     # create a front end that does this via user request only
-    find_url_tags(NewsFeed)
+    # find_url_tags(NewsFeed)
 
     # use sorter after find url tags function is ran,
     # create a front end that does this via user request only
-    sorter()
+    # sorter()
 
     # createDatabase("Feed_Table")
 
