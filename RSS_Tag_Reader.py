@@ -98,46 +98,61 @@ def simple(FeedList, keyindex):
     # global vars
     global first_level
     global function_type
-    global simplekeytag
  
     # set function_type to simple, assign output_entry based on selected input key
     # also make first_level a copy of the output_entry dict
     function_type = "simple"
-    output_entry = FeedList[keyindex]
+    # output_entry = FeedList[keyindex]
     if isinstance(output_entry, dict):
         first_level = output_entry.copy()
 
-    # if the output has tag, try the following, except no tags, just output the data
-    try:
+    # just output the values found
+    return output_entry
 
-        # assign keys and values from output_entry to seperate lists
-        output_entry_keys = output_entry.keys()
-        output_entry_values = output_entry.values()
-        entry_keys = list(output_entry_keys)
-        entry_values = list(output_entry_values)
+# function to decide which simple function to use
+def decideSimple(keyindex):
 
-        # ask user for which entry they want, save entry to simplekeytag
-        print("Keys found in entry: ")
-        print("\n")
-        print(entry_keys)
-        print("\n")
-        entry_use_key = input("Please enter the entry key you want to see: ")
-        simplekeytag = entry_use_key.copy()
+    decide = 0
+    print(FeedList)
+    output_entry = FeedList[keyindex]
 
-        # find specific key index from keys list based on index from user input
-        subkey = entry_keys.index(entry_use_key)
+    output_entry_keys = output_entry.keys()
+    entry_keys = list(output_entry_keys)
 
-        # find the value the user requests from subkey index var
-        entry_detail = entry_values[subkey]
+    if len(entry_keys) > 0:
+        decide = 1
+    else: 
+        decide = 0
 
-        # return the requested value
-        return entry_detail
+    return output_entry, decide
 
-    # in the case there are no tags in feed
-    except:
+# function to find the tags from simple function if they have them
+def simpleTwo():
 
-        # just output the values found
-        return output_entry
+    global simplekeytag
+
+    # assign keys and values from output_entry to seperate lists
+    output_entry_keys = output_entry.keys()
+    output_entry_values = output_entry.values()
+    entry_keys = list(output_entry_keys)
+    entry_values = list(output_entry_values)
+
+    # ask user for which entry they want, save entry to simplekeytag
+    print("Keys found in entry: ")
+    print("\n")
+    print(entry_keys)
+    print("\n")
+    entry_use_key = input("Please enter the entry key you want to see: ")
+    simplekeytag = entry_use_key.copy()
+
+    # find specific key index from keys list based on index from user input
+    subkey = entry_keys.index(entry_use_key)
+
+    # find the value the user requests from subkey index var
+    entry_detail = entry_values[subkey]
+
+    # return the requested value
+    return entry_detail
 
 # takes RSS url and organizes tags for sorting in simpletaglist
 def find_url_tags():
@@ -145,11 +160,10 @@ def find_url_tags():
     # global vars
     global simpletaglist
     global FeedList
-    global keyindex
-    global keyforuse
 
     # convert values from Newsfeed into a list for use in output functions
     FeedList = list(NewsFeed.values())
+    # print(FeedList)
 
     # write json file for NewsFeed
     write_basic_json(NewsFeed, "RSS_Feed")

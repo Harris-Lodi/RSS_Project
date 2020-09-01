@@ -66,7 +66,7 @@ class GUI:
         self.optionsunoBtn = tk.Button(self.frm, text="Choose Key", command=self.optionsUno)
         self.optionsunoBtn.grid(row=6, column=1, pady = 10)
 
-        self.JSONBtn = tk.Button(self.frm, text="Make JSON", command=sorter)
+        self.JSONBtn = tk.Button(self.frm, text="Make JSON", command=self.callSimple)
         self.JSONBtn.grid(row=6, column=2, pady = 10)
 
         self.clearGridBtn = tk.Button(self.frm, text="Clear Grid", command=self.clearGrid)
@@ -123,6 +123,17 @@ class GUI:
         self.optionListbox.grid_remove()
         delLists()
 
+    # function to work with the simple function from RSS_Tag_Reader
+    def callSimple(self):
+
+        global FeedList
+
+        self.optionListbox.grid(row=3, column=1, columnspan = 5)
+        # output_entry = FeedList[keyindex]
+
+        # OE, decide = decideSimple(FeedList, keyindex)
+        print(FeedList)
+
     # function to handle options from the URL Feed
     def URLoptions(self):
 
@@ -138,13 +149,20 @@ class GUI:
 
     # function to update keyindex from user input
     def optionsUno(self):
+
+        global keyindex
+        global keyforuse
+        global simpletaglist
         
         if not self.enterString.get() == "":
             
             keyforuse = self.enterString.get()
             keyindex = simpletaglist.index(keyforuse)
+            print(simpletaglist)
+            print(keyindex)
             self.clearTextbox()
             self.optionListbox.grid_remove()
+            del simpletaglist[:]
 
     # function to handle copying the URL of the entry from table the user wants
     def copy_info(self):
