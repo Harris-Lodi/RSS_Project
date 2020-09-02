@@ -93,43 +93,40 @@ def non_simple(FeedList, keyindex):
     return entry_detail
 
 # function to output data for non entries RSS tags
-def simple(FeedList, keyindex):
+def simple(output_entry, keyindex):
 
-    # global vars
-    global first_level
-    global function_type
- 
-    # set function_type to simple, assign output_entry based on selected input key
-    # also make first_level a copy of the output_entry dict
-    function_type = "simple"
-    # output_entry = FeedList[keyindex]
-    if isinstance(output_entry, dict):
-        first_level = output_entry.copy()
+    print(keyindex)
+    output_detail = output_entry[keyindex]
 
     # just output the values found
-    return output_entry
+    return output_detail
 
 # function to decide which simple function to use
 def decideSimple(keyindex):
 
     decide = 0
-    print(FeedList)
     output_entry = FeedList[keyindex]
 
-    output_entry_keys = output_entry.keys()
-    entry_keys = list(output_entry_keys)
-
-    if len(entry_keys) > 0:
+    try:
+        output_entry_keys = output_entry.keys()
+        entry_keys = list(output_entry_keys)
+        print(entry_keys)
         decide = 1
-    else: 
+    except: 
         decide = 0
 
     return output_entry, decide
 
 # function to find the tags from simple function if they have them
-def simpleTwo():
+def simpleTwo(output_entry):
 
-    global simplekeytag
+    # global vars
+    global first_level
+
+    # set function_type to simple, assign output_entry based on selected input key
+    # also make first_level a copy of the output_entry dict
+    if isinstance(output_entry, dict):
+        first_level = output_entry.copy()
 
     # assign keys and values from output_entry to seperate lists
     output_entry_keys = output_entry.keys()
@@ -137,12 +134,30 @@ def simpleTwo():
     entry_keys = list(output_entry_keys)
     entry_values = list(output_entry_values)
 
+    return entry_keys, entry_values
+
     # ask user for which entry they want, save entry to simplekeytag
-    print("Keys found in entry: ")
-    print("\n")
-    print(entry_keys)
-    print("\n")
-    entry_use_key = input("Please enter the entry key you want to see: ")
+    # print("Keys found in entry: ")
+    # print("\n")
+    # print(entry_keys)
+    # print("\n")
+    # entry_use_key = input("Please enter the entry key you want to see: ")
+    # simplekeytag = entry_use_key.copy()
+
+    # find specific key index from keys list based on index from user input
+    # subkey = entry_keys.index(entry_use_key)
+
+    # find the value the user requests from subkey index var
+    # entry_detail = entry_values[subkey]
+
+    # return the requested value
+    # return entry_detail
+
+# function to comples simple function if tags are found
+def simpleTwoB(entry_use_key, entry_keys, entry_values):
+
+    global simplekeytag
+
     simplekeytag = entry_use_key.copy()
 
     # find specific key index from keys list based on index from user input
@@ -166,7 +181,7 @@ def find_url_tags():
     # print(FeedList)
 
     # write json file for NewsFeed
-    write_basic_json(NewsFeed, "RSS_Feed")
+    # write_basic_json(NewsFeed, "RSS_Feed")
 
     # store keys in simpletaglist and output them
     # print("HTML Tags for in URL Feed: ")
@@ -184,6 +199,8 @@ def find_url_tags():
 
     # remove entries from simple tag list to avoid double function call
     simpletaglist.remove("entries")
+
+    return FeedList
 
     # sorter()
 

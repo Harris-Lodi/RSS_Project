@@ -23,5 +23,12 @@
  len(NewsFeed[entries]) to get the number of items or entries in feed<br />
  entry = NewsFeed.entries[#] will assign a specific article/item/entry to the variable entry<br />
  entry.keys() will out the html tags for that specific entry<br />
+
+ <b> Haitus Update: </b><br />
+
+ Need to make static variables that can be set from GUI and Get from backend and front end as well.<br />
+ This will require rewriting the entire back end into a class, and initializing the variables in an init function.<br />
+ Also need to re-write the front end to work with the new back end and remove all redundant functions and code from the project.<br />
+ This is a lot of work, thus this poroject is in haitus until I have enough time to come back to it(until further notice)!<br />
  
 

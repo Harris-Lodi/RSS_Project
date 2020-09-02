@@ -69,6 +69,9 @@ class GUI:
         self.JSONBtn = tk.Button(self.frm, text="Make JSON", command=self.callSimple)
         self.JSONBtn.grid(row=6, column=2, pady = 10)
 
+        self.simpleBtn = tk.Button(self.frm, text="Simple", command=self.comSimple)
+        self.simpleBtn.grid(row=6, column=3, pady = 10)
+
         self.clearGridBtn = tk.Button(self.frm, text="Clear Grid", command=self.clearGrid)
         self.clearGridBtn.grid(row=6, column=5, pady = 10)
 
@@ -123,29 +126,63 @@ class GUI:
         self.optionListbox.grid_remove()
         delLists()
 
-    # function to work with the simple function from RSS_Tag_Reader
-    def callSimple(self):
+    # function to handle options from the URL Feed
+    def URLoptions(self):
 
         global FeedList
 
         self.optionListbox.grid(row=3, column=1, columnspan = 5)
-        # output_entry = FeedList[keyindex]
-
-        # OE, decide = decideSimple(FeedList, keyindex)
-        print(FeedList)
-
-    # function to handle options from the URL Feed
-    def URLoptions(self):
-
-        self.optionListbox.grid(row=3, column=1, columnspan = 5)
         
-        find_url_tags()
+        FeedList = find_url_tags()
 
         for items in simpletaglist:
 
             index = 0
             self.optionListbox.insert(index, items)
             index += 1
+
+    # function to work with the simple function from RSS_Tag_Reader
+    def callSimple(self):
+
+        global FeedList
+        global keyindex
+
+        OE, decide = decideSimple(keyindex)
+        print(decide)
+
+        if decide == 1:
+            keys, values = simpleTwo(OE)
+            self.simpleMidCall(keys, values)
+        else:
+            print(simple(OE, keyindex))
+
+    # function to complete simple function output
+    def simpleMidCall(self, entry_keys, entry_values):
+
+        global simplekeytag
+        global ekS
+        global ekV
+
+        eks = entry_keys
+        ekV = entry_values
+
+        self.optionListbox.delete(0, END)
+
+        self.optionListbox.grid(row=3, column=1, columnspan = 5)
+
+        for items in entry_keys:
+
+            index = 0
+            self.optionListbox.insert(index, items)
+            index += 1
+
+    # function to complete simple
+    def comSimple(self):
+
+        if not self.enterString.get() == "":
+
+            entry_use_key = self.enterString.get()
+            simpleTwoB(entry_use_key, ekS, ekV)
 
     # function to update keyindex from user input
     def optionsUno(self):
