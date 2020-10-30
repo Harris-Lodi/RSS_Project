@@ -31,4 +31,16 @@
  Also need to re-write the front end to work with the new back end and remove all redundant functions and code from the project.<br />
  This is a lot of work, thus this project is in haitus until I have enough time to come back to it(until further notice)!<br />
  
+ <b>Blueprint:</b><br />
+ <ul>
+  <li> Have a button to convert the entire page to JSON </li>
+  <li> Create a JSON file that only contains the header data </li>
+  <li> A button to create a list of entries by index to JSON (while showing entry name and date on GUI) </li>
+  <li> Have a button to create database by given name (upon creation add in all data from header) </li>
+  <li> A button to update the database with entries (and header data) from JSON entries list (and JSON header data) </li>
+  <li> Include list box showing the database (Index, Title, Date, Link) with capabilities to left click on database row and have index selected in focus </li>
+  <li> Have buttons to update, read, and delete entries after a row is focused on and pushing the corresponding button </li>
+  <li> Have a box to show summary, title, and date upon left clicking the entry in list box </li>
+  <li> Also have displays that show all the other info that is in the header related to the RSS page </li>
+ </ul><br />
 
