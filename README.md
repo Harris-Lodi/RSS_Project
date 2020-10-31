@@ -35,6 +35,8 @@
  <ul>
   <li> Have a button to convert the entire page to JSON </li>
   <li> Create a JSON file that only contains the header data </li>
+  <li> Have a button to delete all JSON files from JSON folder that the app creates</li>
+  <li> Have a button to delete specific JSON entry when selected in listbox</li>
   <li> A button to create a list of entries by index to JSON (while showing entry name and date on GUI) </li>
   <li> Have a button to create database by given name (upon creation add in all data from header) </li>
   <li> A button to update the database with entries (and header data) from JSON entries list (and JSON header data) </li>
