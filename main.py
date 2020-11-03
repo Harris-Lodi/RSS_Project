@@ -1,5 +1,15 @@
+from Json import JsonMaker
 import tkinter as tk
-from tkinter import messagebox, Listbox, Label, GROOVE, CENTER, Entry
+from tkinter import messagebox, Listbox, Label, GROOVE, CENTER, Entry, END
+
+js = JsonMaker()
+
+# region variables, https://lukesmith.xyz/rss.xml
+
+entry = ""
+name = ""
+
+# endregion
 
 class Application(tk.Frame):
 
@@ -24,6 +34,8 @@ class Application(tk.Frame):
         # Populate initial list
         self.populate_list()
 
+    # region Functions
+
     # Create GUI
     def create_widgets(self):
 
@@ -45,33 +57,83 @@ class Application(tk.Frame):
         self.enterString_label = Label(self.frm, text="Enter RSS URL and Strings:", bg = '#424242', fg = '#FFFFFF')
         self.enterString_label.grid(row=4, column=1, pady=10, padx=10)
 
-        self.inputURL = tk.Button(self.frm, text="Enter RSS URL")
+        self.inputURL = tk.Button(self.frm, text="Enter RSS URL", command=self.enterURL)
         self.inputURL.grid(row=5, column=1, pady = 10)
 
         self.cdbBtn = tk.Button(self.frm, text="Create DB")
-        self.cdbBtn.grid(row=5, column=2, pady = 10)
+        self.cdbBtn.grid(row=5, column=4, pady = 10)
 
         self.copyBtn = tk.Button(self.frm, text="Copy URL")
         self.copyBtn.grid(row=5, column=3, pady = 10)
 
-        self.clearGridBtn = tk.Button(self.frm, text="Show DB")
-        self.clearGridBtn.grid(row=5, column=4, pady = 10)
+        self.clearGridBtn = tk.Button(self.frm, text="Enter Name", command=self.getName)
+        self.clearGridBtn.grid(row=5, column=2, pady = 10)
 
         self.optionsunoBtn = tk.Button(self.frm, text="Choose Key")
         self.optionsunoBtn.grid(row=6, column=1, pady = 10)
 
-        self.JSONBtn = tk.Button(self.frm, text="Make JSON")
+        self.JSONBtn = tk.Button(self.frm, text="Make JSON", command=self.makeJson)
         self.JSONBtn.grid(row=6, column=2, pady = 10)
 
-        self.simpleBtn = tk.Button(self.frm, text="Simple")
+        self.simpleBtn = tk.Button(self.frm, text="JSON Entries", command=self.makeJsonEntries)
         self.simpleBtn.grid(row=6, column=3, pady = 10)
 
         self.clearGridBtn = tk.Button(self.frm, text="Clear Grid")
         self.clearGridBtn.grid(row=6, column=4, pady = 10)
-    
+
+        self.clearGridBtn = tk.Button(self.frm, text="test vars", command=self.testVar)
+        self.clearGridBtn.grid(row=6, column=6, pady = 10)
+
+    # region button functions
+
+    # function to handle event that the user enters the RSS URL in textbox
+    def enterURL(self):
+
+        global entry
+
+        if not self.enterString.get() == "":
+
+            entry = self.enterString.get()
+            self.clearTextbox()
+
+    # function to get names from entry box
+    def getName(self):
+
+        global name 
+
+        if not self.enterString.get() == "":
+
+            name = self.enterString.get()
+            self.clearTextbox()
+
+    # function to clear the textbox
+    def clearTextbox(self):
+
+        self.enterString.delete(0, END)
+
     # function to populate listbox with data from database if availible
     def populate_list(self):
         pass
+
+    # function to take in url and convert it to json
+    def makeJson(self):
+
+        js.makeWholeJSON(name, entry)
+    
+    # function to make json file for each entry in the feed
+    def makeJsonEntries(self):
+
+        js.getEntries()
+    
+    # function to test the values of all variables
+    def testVar(self):
+
+        print("URL is: ", entry)
+        print("Name is: ",name)
+    
+    # endregion
+
+    # endregion
 
 # Driver code
 root = tk.Tk()
