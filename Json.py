@@ -18,19 +18,46 @@ class JsonMaker:
         if not os.path.isdir('Json_Files/'):
             os.mkdir('Json_Files/')
         else:
-            pass
+            self.readFromJson(0)
 
     # this function will find a json file from given name, and set that to the appropriate dicts
-    def readFromJson(self):
+    def readFromJson(self, directory_Index):
 
-        if len(os.listdir('Json_Files/')) == 0:
-            print("Directory is empty")
-        else:    
-            f = open(f"Json_Files/{NewsFeed_Name}.json")
-            NewsFeed = json.load(f)
-            f.close()
-            print(NewsFeed.keys())
+        global NewsFeed
+        global NewsFeed_Name
 
+        NewsFeed_Name = ""
+        names_list = []
+        d_Index = int()
+
+        print(d_Index)
+        print(NewsFeed_Name)
+
+        if not NewsFeed_Name == "":
+            if not len(os.listdir('Json_Files/')) == 0:   
+                f = open(f"Json_Files/{NewsFeed_Name}/main.json")
+                NewsFeed = json.load(f)
+                f.close()
+                # print(NewsFeed.keys())
+            else:
+                pass 
+        else:
+            # get the names of the immediate child directories of 'Json_Files'
+            names_list = next(os.walk('Json_Files/'))[1]
+            # set index based on the directory name given, if input is not an integer:
+            if isinstance(directory_Index, str):
+                d_Index = names_list.index(directory_Index)
+                # print("if: ", d_Index)
+            else:
+                d_Index = directory_Index
+                # print("else: ", d_Index)
+            # assign a specific name to NewsFeed_names bases on index value!
+            NewsFeed_Name = names_list[d_Index]
+            # print(NewsFeed_Name)
+            # recursivly re-try re-loading NewsFeed
+            self.readFromJson(d_Index)
+
+    # create main.json file from the entire JSON file!
     def makeWholeJSON(self, name, feed):
 
         global NewsFeed
@@ -41,28 +68,39 @@ class JsonMaker:
         # feed parse the RSS url feed into a dictionary called NewsFeed
         NewsFeed = feedparser.parse(feed)
 
-        print(NewsFeed.keys())
-
         # remove "bozo_exception" key since that causes an error in json file
         NewsFeed.pop("bozo_exception", None)
 
         # create json file for url RSS feed
-        with open(f"Json_Files/{name}.json", 'w') as fp:
-            json.dump(NewsFeed, fp, indent=4)
+        if not os.path.isdir(f'Json_Files/{name}'):
+            os.mkdir(f'Json_Files/{name}')
+            with open(f"Json_Files/{name}/main.json", 'w') as fp:
+                json.dump(NewsFeed, fp, indent=4)
+        else:
+            pass
     
+    # create JSON files for each entry in RSS feed
     def getEntries(self):
 
-        print(NewsFeed.keys())
+        if not NewsFeed == {}:
 
-        entries = NewsFeed.entries
+            # print(NewsFeed.keys())
 
-        print(entries[0].keys())
+            entries = NewsFeed['entries']
 
-        for i in range(len(entries)):
-            title = entries[i].published
-            # create json file for url RSS feed
-            with open(f"Json_Files/{i}.json", 'w') as fp:
-                json.dump(entries[i], fp, indent=4)
+            print(entries[0].keys())
 
-        
+            for i in range(len(entries)):
+                # create json file for url RSS feed
+                with open(f"Json_Files/{NewsFeed_Name}/{i}.json", 'w') as fp:
+                    json.dump(entries[i], fp, indent=4)
+        else:
+            print('NewsFeed was not set to main.json!')
 
+    # Test variables values for debugging and testing
+    def testVariables(self):
+
+        if not NewsFeed == {}:
+
+            print(NewsFeed.keys())
+            print(NewsFeed_Name)

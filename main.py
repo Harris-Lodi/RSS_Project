@@ -69,7 +69,7 @@ class Application(tk.Frame):
         self.clearGridBtn = tk.Button(self.frm, text="Enter Name", command=self.getName)
         self.clearGridBtn.grid(row=5, column=2, pady = 10)
 
-        self.optionsunoBtn = tk.Button(self.frm, text="Choose Key")
+        self.optionsunoBtn = tk.Button(self.frm, text="From Directory", command=self.findDirectory)
         self.optionsunoBtn.grid(row=6, column=1, pady = 10)
 
         self.JSONBtn = tk.Button(self.frm, text="Make JSON", command=self.makeJson)
@@ -125,11 +125,22 @@ class Application(tk.Frame):
 
         js.getEntries()
     
+    # function to set NewsFeed in Json.py to the main.JSON file located in directory specificed by user input
+    def findDirectory(self):
+
+        if not self.enterString.get() == "":
+
+            indexValue = self.enterString.get()
+            js.readFromJson(indexValue)
+            # print('Find directory activated!')
+            self.clearTextbox()
+
     # function to test the values of all variables
     def testVar(self):
 
         print("URL is: ", entry)
         print("Name is: ",name)
+        js.testVariables()
     
     # endregion
 
