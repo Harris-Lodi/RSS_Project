@@ -7,6 +7,7 @@
  pandas - pip3 install pandas<br />
  sqlite3 - pip3 install pysqlite3<br />
  pyperclip - pip install pyperclip<br />
+ Beautiful Soup 4 - pip install beautifulsoup4<br />
 
  <b>Credits</b><br />
 
