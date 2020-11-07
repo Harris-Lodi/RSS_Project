@@ -3,6 +3,7 @@ import os
 import feedparser
 from pandas import DataFrame 
 from bs4 import BeautifulSoup
+import sqlite3
 
 # region Variables
 
@@ -157,6 +158,89 @@ class JsonMaker:
 
         # saving the DataFrame as a CSV file 
         save_csv_data = df.to_csv('Entries.csv', index = True) 
+
+    # region Database functions
+
+    # function to create database
+    def makeDB(self, db, table):
+
+        # Create a database or connect to one
+        conn = sqlite3.connect(f'{db}.db')
+        # Create cursor
+        c = conn.cursor()
+        c.execute(f"DROP TABLE IF EXISTS {table}")
+        c.execute(f"""CREATE TABLE IF NOT EXISTS {table} (
+                ID INTEGER, 
+                Titles TEXT, 
+                Published TEXT, 
+                Link TEXT,
+                Summary TEXT
+                ) """)
+        #Commit Changes
+        conn.commit()
+        # Close Connection 
+        conn.close()
+
+    # function to convert Dataframe to SQL
+    def convertToSQL(self, db, table):
+
+        # Create a database or connect to one
+        conn = sqlite3.connect(f'{db}.db')
+        # Create cursor
+        c = conn.cursor()
+        # convert dataframe to sql
+        df.to_sql(f'{table}', conn, if_exists='replace', index=False)
+        # Commit Changes
+        conn.commit()
+        # Close Connection 
+        conn.close()
+
+    # delete query from record
+    def deleteDatabaseEntry(self, db, table, orderID):
+
+        # Create a database or connect to one
+        conn = sqlite3.connect(f'{db}.db')
+        # Create cursor
+        c = conn.cursor()
+
+        #delete a row from the table
+        entry = (orderID,)
+        c.execute(f"DELETE FROM {table} WHERE ID = ?;",entry)
+
+        #Commit Changes
+        conn.commit()
+        # Close Connection 
+        conn.close()
+
+    # update table function
+    def updateTable(db, tableName, orderID, _title = None, _date = None, _summary = None, _link = None):
+
+        # Create a database or connect to one
+        conn = sqlite3.connect(f'{db}.db')
+        # Create cursor
+        c = conn.cursor()
+
+        # update table, insert data to table
+        c.execute(f"""UPDATE {tableName} SET
+        Titles = :title,
+        Published = :date,
+        Summary = :sum,
+        Link = :link
+        WHERE ID = :tID""", 
+        {
+            'title': _title,
+            'date': _date,
+            'sum': _summary,
+            'link': _link,
+            'tID': orderID
+        })
+
+        #Commit Changes
+        conn.commit()
+        # Close Connection 
+        conn.close()
+
+    # endregion
 
     # Test variables values for debugging and testing
     def testVariables(self):
