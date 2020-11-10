@@ -4,6 +4,8 @@ import feedparser
 from pandas import DataFrame 
 from bs4 import BeautifulSoup
 import sqlite3
+from pathlib import Path
+import shutil
 
 # region Variables
 
@@ -30,6 +32,12 @@ class JsonMaker:
             os.mkdir('Json_Files/')
         else:
             self.readFromJson(0)
+        
+        # if folder to store csv files is not found, create one
+        if not os.path.isdir('CSV_Files/'):
+            os.mkdir('CSV_Files/')
+        else:
+            pass
 
     # this function will find a json file from given name, and set that to the appropriate dicts
     def readFromJson(self, directory_Index):
@@ -158,20 +166,51 @@ class JsonMaker:
 
         df = DataFrame(JSON_Dict)
 
-        # saving the DataFrame as a CSV file 
-        save_csv_data = df.to_csv('Entries.csv', index = True) 
-
-        print("Dataframe made!")
+        # if folder to store csv files is not found, create one
+        if os.path.isdir('CSV_Files/'):
+            # saving the DataFrame as a CSV file 
+            save_csv_data = df.to_csv(f'CSV_Files/{NewsFeed_Name}.csv', index = True)
+            print("Dataframe made!")
+        else:
+            os.mkdir('CSV_Files/')
+            print("Run makeCSV function again!")
 
     # function to clear JSON Files
     def wipeJSON(self):
 
-        # if folder to store json_files is not found, create one
-        if not os.path.isdir('Json_Files/'):
-            pass
+        # if folder to store json_files is not found, pass
+        # create a list for all children in directory, and delete them using shutil
+        if os.path.isdir('Json_Files/'):
+
+            myjsondir = [ f.path for f in os.scandir('Json_Files/') if f.is_dir() ]
+            # print(myjsondir)
+            # print(type(myjsondir))
+            try:
+                for i in myjsondir:
+                    jpath = Path(f'{i}')
+                    shutil.rmtree(jpath)
+            except OSError as e:
+                print("Error: %s : %s" % (myjsondir, e.strerror))
         else:
-            mydir = 'Json_Files/'
-            list( map( os.remove, (os.path.join( mydir,f) for f in os.listdir(mydir)) ) )
+            print("Something went wrong deleting json")
+    
+    # function to delete all CSV files
+    def wipeCSV(self):
+
+        # function to delete csv files
+        if os.path.isdir('CSV_Files/'):
+
+            mycsvdir = [ f.path for f in os.scandir('CSV_Files/') if f.is_file() ]
+            # print(mycsvdir)
+            # print(type(mycsvdir))
+            try:
+                for i in mycsvdir:
+                    cpath = Path(f'{i}')
+                    os.remove(f'{cpath}')
+            except OSError as e:
+                print("Error: %s : %s" % (mycsvdir, e.strerror))
+        else:
+            print("Something went wrong deleting csv")
 
     # region Database functions
 

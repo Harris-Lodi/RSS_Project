@@ -94,6 +94,9 @@ class Application(tk.Frame):
         self.clearJSONBtn = tk.Button(self.frm, text="Clear JSON", command=self.ClearJSON)
         self.clearJSONBtn.grid(row=7, column=3, pady = 10)
 
+        self.clearCSVBtn = tk.Button(self.frm, text="Clear CSV", command=self.ClearCSV)
+        self.clearCSVBtn.grid(row=7, column=4, pady = 10)
+
     # region button functions
 
     # function to handle event that the user enters the RSS URL in textbox
@@ -185,6 +188,11 @@ class Application(tk.Frame):
     def ClearJSON(self):
 
         js.wipeJSON()
+    
+    # function to clear the CSV files from the directory
+    def ClearCSV(self):
+
+        js.wipeCSV()
 
     # function to test the values of all variables
     def testVar(self):

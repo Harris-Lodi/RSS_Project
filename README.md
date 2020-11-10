@@ -8,6 +8,8 @@
  sqlite3 - pip3 install pysqlite3<br />
  pyperclip - pip install pyperclip<br />
  Beautiful Soup 4 - pip install beautifulsoup4<br />
+ Path - pip install pathlib - https://pypi.org/project/pathlib/<br />
+ Shutil - pip install shutil<br />
 
  <b>Credits</b><br />
 
