@@ -48,6 +48,8 @@ class JsonMaker:
                 f = open(f"Json_Files/{NewsFeed_Name}/main.json")
                 NewsFeed = json.load(f)
                 f.close()
+                entries = NewsFeed['entries']
+                self.makeCSV(entries)
                 # print(NewsFeed.keys())
             else:
                 pass 
@@ -159,6 +161,18 @@ class JsonMaker:
         # saving the DataFrame as a CSV file 
         save_csv_data = df.to_csv('Entries.csv', index = True) 
 
+        print("Dataframe made!")
+
+    # function to clear JSON Files
+    def wipeJSON(self):
+
+        # if folder to store json_files is not found, create one
+        if not os.path.isdir('Json_Files/'):
+            pass
+        else:
+            mydir = 'Json_Files/'
+            list( map( os.remove, (os.path.join( mydir,f) for f in os.listdir(mydir)) ) )
+
     # region Database functions
 
     # function to create database
@@ -183,17 +197,20 @@ class JsonMaker:
 
     # function to convert Dataframe to SQL
     def convertToSQL(self, db, table):
-
-        # Create a database or connect to one
-        conn = sqlite3.connect(f'{db}.db')
-        # Create cursor
-        c = conn.cursor()
-        # convert dataframe to sql
-        df.to_sql(f'{table}', conn, if_exists='replace', index=False)
-        # Commit Changes
-        conn.commit()
-        # Close Connection 
-        conn.close()
+        # if the dataframe is not empty:
+        if not df.empty:
+            # Create a database or connect to one
+            conn = sqlite3.connect(f'{db}.db')
+            # Create cursor
+            c = conn.cursor()
+            # convert dataframe to sql
+            df.to_sql(f'{table}', conn, if_exists='replace', index=False)
+            # Commit Changes
+            conn.commit()
+            # Close Connection 
+            conn.close()
+        else:
+            print("Dataframe was empty!")
 
     # delete query from record
     def deleteDatabaseEntry(self, db, table, orderID):

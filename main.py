@@ -8,6 +8,7 @@ js = JsonMaker()
 
 entry = ""
 name = ""
+DatabaseName = ""
 
 # endregion
 
@@ -46,7 +47,7 @@ class Application(tk.Frame):
         self.spaceFrame.grid(row = 0, column = 1, columnspan=5, pady = 10, ipadx = 10)
 
         self.optionListbox = Listbox(self.frm, bg = '#D8D8D8', height=20, width=150, border=0)
-        self.optionListbox.grid(row=8, column=0, columnspan=10, rowspan=6, pady=20, padx=20)
+        self.optionListbox.grid(row=9, column=0, columnspan=10, rowspan=6, pady=20, padx=20)
 
         self.enterString = Entry(self.frm, width=90)
         self.enterString.grid(row=4, column=2, columnspan=2, pady=5)
@@ -60,7 +61,7 @@ class Application(tk.Frame):
         self.inputURL = tk.Button(self.frm, text="Enter RSS URL", command=self.enterURL)
         self.inputURL.grid(row=5, column=1, pady = 10)
 
-        self.cdbBtn = tk.Button(self.frm, text="Create DB")
+        self.cdbBtn = tk.Button(self.frm, text="Create DB", command=self.CreateDB)
         self.cdbBtn.grid(row=5, column=4, pady = 10)
 
         self.copyBtn = tk.Button(self.frm, text="Copy URL")
@@ -83,6 +84,15 @@ class Application(tk.Frame):
 
         self.clearGridBtn = tk.Button(self.frm, text="test vars", command=self.testVar)
         self.clearGridBtn.grid(row=6, column=6, pady = 10)
+
+        self.DBNameBtn = tk.Button(self.frm, text="DB Name", command=self.nameDB)
+        self.DBNameBtn.grid(row=7, column=1, pady = 10)
+
+        self.EditDBBtn = tk.Button(self.frm, text="Edit DB", command=self.editDBWindow)
+        self.EditDBBtn.grid(row=7, column=2, pady = 10)
+
+        self.clearJSONBtn = tk.Button(self.frm, text="Clear JSON", command=self.ClearJSON)
+        self.clearJSONBtn.grid(row=7, column=3, pady = 10)
 
     # region button functions
 
@@ -135,11 +145,53 @@ class Application(tk.Frame):
             # print('Find directory activated!')
             self.clearTextbox()
 
+    # function to get Database name from User
+    def nameDB(self):
+
+        global DatabaseName
+
+        if not self.enterString.get() == "":
+
+            DatabaseName = self.enterString.get()
+            self.clearTextbox()
+
+    # function to create database
+    def CreateDB(self):
+
+        if not DatabaseName == "":
+
+            if not self.enterString.get() == "":
+
+                table = str(self.enterString.get())
+                js.makeDB(DatabaseName, table)
+                js.convertToSQL(DatabaseName, table)
+                self.clearTextbox()
+            else:
+                print("Database creation failed!")
+        else:
+            print("Database name was null!")
+
+    # function to create edit DB window:
+    def editDBWindow(self):
+
+        newWindow = tk.Toplevel(app)
+        labelExample = tk.Label(newWindow, text = "New Window")
+        buttonExample = tk.Button(newWindow, text = "New Window button")
+
+        labelExample.pack()
+        buttonExample.pack()
+    
+    # function to clear the JSON files from the directory
+    def ClearJSON(self):
+
+        js.wipeJSON()
+
     # function to test the values of all variables
     def testVar(self):
 
         print("URL is: ", entry)
         print("Name is: ",name)
+        print("Database Name is: ",DatabaseName)
         js.testVariables()
     
     # endregion
