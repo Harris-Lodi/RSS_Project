@@ -39,6 +39,12 @@ class JsonMaker:
         else:
             pass
 
+        # if folder to store Database files is not found, create one
+        if not os.path.isdir('DB_Files/'):
+            os.mkdir('DB_Files/')
+        else:
+            pass
+
     # this function will find a json file from given name, and set that to the appropriate dicts
     def readFromJson(self, directory_Index):
 
@@ -211,35 +217,55 @@ class JsonMaker:
                 print("Error: %s : %s" % (mycsvdir, e.strerror))
         else:
             print("Something went wrong deleting csv")
+    
+    # function to delete all CSV files
+    def wipeDB(self):
+
+        # function to delete csv files
+        if os.path.isdir('DB_Files/'):
+
+            mydbdir = [ f.path for f in os.scandir('DB_Files/') if f.is_file() ]
+            # print(mydbdir)
+            # print(type(mydbdir))
+            try:
+                for i in mydbdir:
+                    dbpath = Path(f'{i}')
+                    os.remove(f'{dbpath}')
+            except OSError as e:
+                print("Error: %s : %s" % (mydbdir, e.strerror))
+        else:
+            print("Something went wrong deleting db")
 
     # region Database functions
 
     # function to create database
     def makeDB(self, db, table):
 
-        # Create a database or connect to one
-        conn = sqlite3.connect(f'{db}.db')
-        # Create cursor
-        c = conn.cursor()
-        c.execute(f"DROP TABLE IF EXISTS {table}")
-        c.execute(f"""CREATE TABLE IF NOT EXISTS {table} (
-                ID INTEGER, 
-                Titles TEXT, 
-                Published TEXT, 
-                Link TEXT,
-                Summary TEXT
-                ) """)
-        #Commit Changes
-        conn.commit()
-        # Close Connection 
-        conn.close()
+        if os.path.isdir('DB_Files/'):
+
+            # Create a database or connect to one
+            conn = sqlite3.connect(f'DB_Files/{db}.db')
+            # Create cursor
+            c = conn.cursor()
+            c.execute(f"DROP TABLE IF EXISTS {table}")
+            c.execute(f"""CREATE TABLE IF NOT EXISTS {table} (
+                    ID INTEGER, 
+                    Titles TEXT, 
+                    Published TEXT, 
+                    Link TEXT,
+                    Summary TEXT
+                    ) """)
+            #Commit Changes
+            conn.commit()
+            # Close Connection 
+            conn.close()
 
     # function to convert Dataframe to SQL
     def convertToSQL(self, db, table):
         # if the dataframe is not empty:
         if not df.empty:
             # Create a database or connect to one
-            conn = sqlite3.connect(f'{db}.db')
+            conn = sqlite3.connect(f'DB_Files/{db}.db')
             # Create cursor
             c = conn.cursor()
             # convert dataframe to sql
@@ -255,7 +281,7 @@ class JsonMaker:
     def deleteDatabaseEntry(self, db, table, orderID):
 
         # Create a database or connect to one
-        conn = sqlite3.connect(f'{db}.db')
+        conn = sqlite3.connect(f'DB_Files/{db}.db')
         # Create cursor
         c = conn.cursor()
 
@@ -269,10 +295,10 @@ class JsonMaker:
         conn.close()
 
     # update table function
-    def updateTable(db, tableName, orderID, _title = None, _date = None, _summary = None, _link = None):
+    def updateTable(self, db, tableName, orderID, _title = None, _date = None, _summary = None, _link = None):
 
         # Create a database or connect to one
-        conn = sqlite3.connect(f'{db}.db')
+        conn = sqlite3.connect(f'DB_Files/{db}.db')
         # Create cursor
         c = conn.cursor()
 
@@ -295,6 +321,18 @@ class JsonMaker:
         conn.commit()
         # Close Connection 
         conn.close()
+
+    # function to output rows from db to show on listbox
+    def showTable(self, db, table):
+
+        con = sqlite3.connect(f'DB_Files/{db}.db')
+        mycur = con.cursor() 
+        mycur.execute(f"SELECT ID, Titles, Published, Link FROM {table} ORDER BY ID;")
+        rows = mycur.fetchall()
+
+        return rows
+
+
 
     # endregion
 
