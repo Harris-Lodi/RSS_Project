@@ -327,12 +327,10 @@ class JsonMaker:
 
         con = sqlite3.connect(f'DB_Files/{db}.db')
         mycur = con.cursor() 
-        mycur.execute(f"SELECT ID, Titles, Published, Link FROM {table} ORDER BY ID;")
+        mycur.execute(f"SELECT ID, Titles, Published, Link, Summary FROM {table} ORDER BY ID;")
         rows = mycur.fetchall()
 
         return rows
-
-
 
     # endregion
 
