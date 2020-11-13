@@ -249,7 +249,7 @@ class JsonMaker:
             c = conn.cursor()
             c.execute(f"DROP TABLE IF EXISTS {table}")
             c.execute(f"""CREATE TABLE IF NOT EXISTS {table} (
-                    ID INTEGER, 
+                    ID INTEGER PRIMARY KEY, 
                     Titles TEXT, 
                     Published TEXT, 
                     Link TEXT,
@@ -281,13 +281,15 @@ class JsonMaker:
     def deleteDatabaseEntry(self, db, table, orderID):
 
         # Create a database or connect to one
-        conn = sqlite3.connect(f'DB_Files/{db}.db')
+        conn = sqlite3.connect(f'DB_Files/{db}.db', isolation_level=None)
         # Create cursor
         c = conn.cursor()
 
         #delete a row from the table
         entry = (orderID,)
         c.execute(f"DELETE FROM {table} WHERE ID = ?;",entry)
+        c.execute("VACUUM")
+        self.updateID(db, table)
 
         #Commit Changes
         conn.commit()
@@ -295,7 +297,7 @@ class JsonMaker:
         conn.close()
 
     # update table function
-    def updateTable(self, db, tableName, orderID, _title = None, _date = None, _summary = None, _link = None):
+    def updateTable(self, db, tableName, orderID, _title = None, _date = None, _link = None, _summary = None):
 
         # Create a database or connect to one
         conn = sqlite3.connect(f'DB_Files/{db}.db')
@@ -322,8 +324,24 @@ class JsonMaker:
         # Close Connection 
         conn.close()
 
+    # update ID column to be equal to rowid
+    def updateID(self, db, tablename):
+
+        # Create a database or connect to one
+            conn = sqlite3.connect(f'DB_Files/{db}.db')
+            # Create cursor
+            c = conn.cursor()
+            # select all rows, for each row, set it's ID value to rowid
+            c.execute(f"""UPDATE {tablename} SET ID = rowid""")
+            # Commit Changes
+            conn.commit()
+            # Close Connection 
+            conn.close()
+
     # function to output rows from db to show on listbox
     def showTable(self, db, table):
+
+        rows = []
 
         con = sqlite3.connect(f'DB_Files/{db}.db')
         mycur = con.cursor() 

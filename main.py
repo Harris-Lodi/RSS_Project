@@ -12,11 +12,12 @@ entry = ""
 name = ""
 DatabaseName = ""
 
-cleansummary = ""
+isSelected = bool()
 currentIndex = 0
 currentTitle = ""
 currentDate = ""
 currentLink = ""
+cleansummary = ""
 
 # endregion
 
@@ -29,6 +30,10 @@ class Application(tk.Frame):
         super().__init__(master)
         self.master = master
         self.js = JsonMaker()
+
+        # init variables
+        global isSelected
+        isSelected = False
 
         # Widget Title
         master.title('RSS Feed Reader')
@@ -67,7 +72,7 @@ class Application(tk.Frame):
         self.enterString = Entry(self.frm, width=90)
         self.enterString.grid(row=4, column=2, columnspan=2, pady=5)
 
-        self.clearInput = tk.Button(self.frm, text="Clear Text")
+        self.clearInput = tk.Button(self.frm, text="Clear Text", command=self.clearTextbox)
         self.clearInput.grid(row=4, column=5, pady = 5, padx=10)
 
         self.enterString_label = Label(self.frm, text="Enter RSS URL and Strings:", bg = '#424242', fg = '#FFFFFF')
@@ -114,6 +119,12 @@ class Application(tk.Frame):
 
         self.copyLinkBtn = tk.Button(self.frm, text="Copy URL", command=self.copy_info)
         self.copyLinkBtn.grid(row=8, column=1, pady = 5)
+
+        self.ShowDBBtn = tk.Button(self.frm, text="Show DB", command=self.showDB)
+        self.ShowDBBtn.grid(row=8, column=2, pady = 5)
+
+        self.removeEntryBtn = tk.Button(self.frm, text="Delete Entry!", command=self.deleteEntry)
+        self.removeEntryBtn.grid(row=8, column=3, pady = 5)
 
     # function to handle event that the user enters the RSS URL in textbox
     def enterURL(self):
@@ -220,7 +231,8 @@ class Application(tk.Frame):
 
     # function to clear the grid
     def clearGrid(self):
-
+        
+        self.tv.delete(*self.tv.get_children()) # delete saved treeview children
         self.tv.grid_remove()
         self.optionListbox.grid_remove()
         self.SummaryBox.delete("1.0","end")
@@ -228,6 +240,10 @@ class Application(tk.Frame):
 
     # function to display content from db
     def showDB(self):
+
+        rows = []
+
+        self.clearGrid()
 
         # style the output graph, style name is "Treeview" as defined in style.configure
         self.style = ttk.Style()
@@ -264,6 +280,10 @@ class Application(tk.Frame):
         global currentDate 
         global currentLink 
         global cleansummary 
+        global isSelected
+
+        isSelected = True
+        # print(isSelected)
 
         # rowSelection is set to the row the user left clicks on
         self.rowSelection = self.tv.selection()[0] 
@@ -290,28 +310,120 @@ class Application(tk.Frame):
         summary = cursel['values'][4]
         cleansummary = BeautifulSoup(summary, "lxml").text # clean summary text with BS4
         self.SummaryBox.insert(tk.END, cleansummary)
+    
+    # function to delete an entry
+    def deleteEntry(self):
+
+        global isSelected
+
+        if isSelected == True:
+
+            if not DatabaseName == "" and not name == "":
+
+                self.js.deleteDatabaseEntry(DatabaseName, name, currentIndex)
+                self.showDB()
+            else:
+                pass    
+        else:
+            pass
+            print("isSelected was False")
+        
+        isSelected = False
 
     # region editDB window functions
 
     # function to create edit DB window:
     def editDBWindow(self):
 
-        newWindow = tk.Toplevel(app)
+        self.newWindow = tk.Toplevel(app)
         # Widget Title
-        newWindow.title('Modify Database')
+        self.newWindow.title('Modify Database')
         # Width height
-        newWindow.geometry("800x450")
+        self.newWindow.geometry("800x450")
         # change background color of root, color from https://html-color-codes.info/
-        newWindow.configure(bg = "#4B088A")
+        self.newWindow.configure(bg = "#4B088A")
         # set title bar icon
-        newWindow.iconbitmap('Icons/RSS_Icon.ico')
+        self.newWindow.iconbitmap('Icons/RSS_Icon.ico')
 
-        labelExample = tk.Label(newWindow, text = "New Window")
-        buttonExample = tk.Button(newWindow, text = "New Window button")
+        self.wfrm = tk.Frame(self.newWindow, bg = "#4B088A")
+        self.wfrm.pack()
 
-        labelExample.pack()
-        buttonExample.pack()
+        self.wFrame = tk.Label(self.wfrm, text="Modify Database Entry!", relief=GROOVE, anchor=CENTER, font = 'Times 12 italic', bg = '#424242', fg = '#FFFFFF')
+        self.wFrame.grid(row = 0, column = 2, columnspan=2, pady = 5, ipadx = 10)
+
+        self.new_title_label = Label(self.wfrm, text="Enter new Title:", bg = '#424242', fg = '#FFFFFF')
+        self.new_title_label.grid(row=1, column=1, pady=5, padx=10)
+
+        self.new_title_String = Entry(self.wfrm, width=45)
+        self.new_title_String.grid(row=1, column=3, columnspan=1, pady=5)
+
+        self.new_date_label = Label(self.wfrm, text="Enter new Date:", bg = '#424242', fg = '#FFFFFF')
+        self.new_date_label.grid(row=2, column=1, pady=5, padx=10)
+
+        self.new_date_String = Entry(self.wfrm, width=45)
+        self.new_date_String.grid(row=2, column=3, columnspan=1, pady=5)
+
+        self.new_URL_label = Label(self.wfrm, text="Enter new URL:", bg = '#424242', fg = '#FFFFFF')
+        self.new_URL_label.grid(row=3, column=1, pady=5, padx=10)
+
+        self.new_URL_String = Entry(self.wfrm, width=45)
+        self.new_URL_String.grid(row=3, column=3, columnspan=1, pady=5)
+
+        self.new_summary_label = Label(self.wfrm, text="Enter new Summary:", bg = '#424242', fg = '#FFFFFF')
+        self.new_summary_label.grid(row=4, column=1, pady=5, padx=10)
+
+        self.new_summary_Box = Text(self.wfrm, height = 10, width = 70) 
+        self.new_summary_Box.grid(row=5, column=1, columnspan=5, rowspan=6, pady=5, padx=20)
+
+        self.saveChangesBtn = tk.Button(self.wfrm, text="Save Changes!", width=18, command=self.saveChanges)
+        self.saveChangesBtn.grid(row=12, column=4, pady = 10)
+
+        self.deleteEntryBtn = tk.Button(self.wfrm, text="Quit!", width=18, command=self.quitWindow)
+        self.deleteEntryBtn.grid(row=12, column=1, pady = 10)
     
+    # function to save changes to the database
+    def saveChanges(self):
+
+        global currentTitle
+        global currentDate
+        global currentLink
+        global cleansummary
+        global isSelected
+
+        if isSelected == True:
+
+            currentTitle = self.new_title_String.get()
+            currentDate = self.new_date_String.get()
+            currentLink = self.new_URL_String.get()
+            cleansummary = self.new_summary_Box.get("1.0",END)
+
+            self.new_title_String.delete(0, END)
+            self.new_date_String.delete(0, END)
+            self.new_URL_String.delete(0, END)
+            self.new_summary_Box.delete("1.0","end")
+
+            # print("")
+            # print("Database name is ",DatabaseName)
+            # print("Table name is ", name)
+            # print("Current Index: ",currentIndex)
+            # print("new Title: ",currentTitle)
+            # print("new Date: ",currentDate)
+            # print("new URL: ",currentLink)
+            # print("new Summary: ",cleansummary)
+
+            self.js.updateTable(DatabaseName, name, currentIndex, currentTitle, currentDate, currentLink, cleansummary)
+            self.showDB()
+        else:
+            pass
+            print("isSelected was False")
+        
+        isSelected = False
+
+    # function to quit the newwindow
+    def quitWindow(self):
+
+        self.newWindow.destroy()
+
     # endregion
 
     # function to test the values of all variables
