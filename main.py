@@ -43,6 +43,7 @@ class Application(tk.Frame):
         master.configure(bg = "#4B088A")
         # set title bar icon
         master.iconbitmap('Icons/RSS_Icon.ico')
+        
         # Create widgets/grid
         self.create_widgets()
         # Init selected item var
@@ -153,10 +154,22 @@ class Application(tk.Frame):
 
     # function to populate listbox with data from database if availible
     def populate_list(self):
+
+        global DatabaseName
+        global name
         
         if os.path.isdir('DB_Files/'):
-            if not name == "" and not DatabaseName == "":
-                self.showDB()
+            if not len(os.listdir('DB_Files/')) == 0:
+                if not name == "" and not DatabaseName == "":
+                    self.showDB()
+                else:
+                    DatabaseName, name = self.js.getDBandName()
+                    print(DatabaseName + " " + name)
+                    self.populate_list()
+            else:
+                pass
+        else:
+            pass
 
     # function to take in url and convert it to json
     def makeJson(self):
@@ -228,6 +241,7 @@ class Application(tk.Frame):
     def ClearDB(self):
 
         self.js.wipeDB()
+        self.clearGrid()
 
     # function to clear the grid
     def clearGrid(self):

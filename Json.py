@@ -122,7 +122,7 @@ class JsonMaker:
 
             self.makeCSV(entries)
 
-            print(entries[0].keys())
+            # print(entries[0].keys())
 
             for i in range(len(entries)):
                 # create json file for url RSS feed
@@ -176,10 +176,47 @@ class JsonMaker:
         if os.path.isdir('CSV_Files/'):
             # saving the DataFrame as a CSV file 
             save_csv_data = df.to_csv(f'CSV_Files/{NewsFeed_Name}.csv', index = True)
-            print("Dataframe made!")
+            # print("Dataframe made!")
         else:
             os.mkdir('CSV_Files/')
             print("Run makeCSV function again!")
+
+    # function to find the Database name and table name at launch
+    def getDBandName(self):
+
+        arr = ""
+        database_name = ""
+        table_name = ""
+
+        if not len(os.listdir('DB_Files/')) == 0:
+
+            arr = str(os.listdir('DB_Files/')[0])
+            # print(arr)
+            database_name = os.path.splitext(arr)[0] # get the name without the extension, [1] would be just the extension
+            # print(database_name)
+
+            if not database_name == "":
+
+                pathway = f"DB_Files/{arr}"
+                # print(pathway)
+
+                # Create a database or connect to one
+                conn = sqlite3.connect(pathway)
+                # Create cursor
+                c = conn.cursor()
+
+                c.execute("SELECT name FROM sqlite_master WHERE type='table';")
+                table_name = str(c.fetchall()[0][0])
+                # print(table_name)
+
+                #Commit Changes
+                conn.commit()
+                # Close Connection 
+                conn.close()
+        else:
+            pass
+        
+        return database_name, table_name
 
     # function to clear JSON Files
     def wipeJSON(self):
