@@ -40,7 +40,7 @@ class Application(tk.Frame):
         # Width height
         master.geometry("1600x900")
         # change background color of root, color from https://html-color-codes.info/
-        master.configure(bg = "#4B088A")
+        master.configure(bg = "#585858")
         # set title bar icon
         master.iconbitmap('Icons/RSS_Icon.ico')
         
@@ -58,90 +58,84 @@ class Application(tk.Frame):
 
         # Frames
 
-        self.frm = tk.Frame(self.master, bg = "#4B088A")
+        self.frm = tk.Frame(self.master, bg = "#585858")
         self.frm.pack()
-
-        self.rightfrm = tk.Frame(self.master, bg = "#4B088A")
-        self.rightfrm.pack(side=RIGHT)
-
-        self.leftfrm = tk.Frame(self.master, bg = "#4B088A")
-        self.leftfrm.pack(side=LEFT)
 
         # GUI elements
 
         self.spaceFrame = tk.Label(self.frm, text="RSS Entries Viewer", relief=GROOVE, anchor=CENTER, font = 'Times 12 italic', bg = '#424242', fg = '#FFFFFF')
-        self.spaceFrame.grid(row = 0, column = 4, columnspan=5, pady = 5, ipadx = 10)
+        self.spaceFrame.grid(row = 0, column = 3, columnspan=9, pady = 5, ipadx = 10)
 
-        self.spaceFrame = tk.Label(self.rightfrm, text="Create Databases!", relief=GROOVE, anchor=CENTER, font = 'Times 12 italic', bg = '#424242', fg = '#FFFFFF')
-        self.spaceFrame.grid(row = 0, column = 1, columnspan=3, pady = 5, ipadx = 10)
+        self.spaceFrame = tk.Label(self.frm, text="Create Databases!", relief=GROOVE, anchor=CENTER, font = 'Times 12 italic', bg = '#424242', fg = '#FFFFFF')
+        self.spaceFrame.grid(row = 1, column = 12, columnspan=3, pady = 5, ipadx = 10)
 
-        self.spaceFrame = tk.Label(self.leftfrm, text="Clear DataBases!", relief=GROOVE, anchor=CENTER, font = 'Times 12 italic', bg = '#424242', fg = '#FFFFFF')
-        self.spaceFrame.grid(row = 0, column = 1, columnspan=3, pady = 5, ipadx = 10)
+        self.spaceFrame = tk.Label(self.frm, text="Clear DataBases!", relief=GROOVE, anchor=CENTER, font = 'Times 12 italic', bg = '#424242', fg = '#FFFFFF')
+        self.spaceFrame.grid(row = 1, column = 1, columnspan=1, pady = 5, ipadx = 10, padx=40)
 
         self.optionListbox = Listbox(self.frm, bg = '#D8D8D8', height="25", width=150, border=0)
-        self.optionListbox.grid(row=10, column=2, columnspan=10, rowspan=6, pady=5, padx=10)
+        self.optionListbox.grid(row=3, column=2, columnspan=10, rowspan=6, pady=5, padx=10)
 
         self.tv = ttk.Treeview(self.frm, columns=(1,2,3,4), show="headings", height="20", style="Treeview")
 
         self.SummaryBox = Text(self.frm, height = 10, width = 100) 
-        self.SummaryBox.grid(row=17, column=2, columnspan=10, rowspan=6, pady=5, padx=20)
+        self.SummaryBox.grid(row=10, column=2, columnspan=10, rowspan=6, pady=5, padx=20)
 
         self.enterString = Entry(self.frm, width=90)
-        self.enterString.grid(row=1, column=5, columnspan=2, pady=5)
+        self.enterString.grid(row=1, column=4, columnspan=6, pady=5)
 
         self.clearInput = tk.Button(self.frm, text="Clear Text", command=self.clearTextbox)
-        self.clearInput.grid(row=2, column=8, pady = 5, padx=10)
+        self.clearInput.grid(row=2, column=9, pady = 15, padx=10)
 
         self.enterString_label = Label(self.frm, text="Enter RSS URL and Strings:", bg = '#424242', fg = '#FFFFFF')
-        self.enterString_label.grid(row=1, column=3, pady=5, padx=10)
+        self.enterString_label.grid(row=1, column=3, pady=5, padx=10, ipadx=20)
 
         self.inputURL = tk.Button(self.frm, text="Enter RSS URL", command=self.enterURL)
-        self.inputURL.grid(row=2, column=5, pady = 5)
+        self.inputURL.grid(row=2, column=5, pady = 15)
 
-        self.cdbBtn = tk.Button(self.rightfrm, text="Create DB", command=self.CreateDB)
-        self.cdbBtn.grid(row=1, column=1, pady = 5)
+        self.cdbBtn = tk.Button(self.frm, text="Create DB", command=self.CreateDB)
+        self.cdbBtn.grid(row=5, column=12, pady = 5, padx=60)
 
-        self.clearDBBtn = tk.Button(self.leftfrm, text="Clear DB", command=self.ClearDB)
-        self.clearDBBtn.grid(row=1, column=1, pady = 5)
+        self.clearDBBtn = tk.Button(self.frm, text="Clear DB", command=self.ClearDB)
+        self.clearDBBtn.grid(row=4, column=1, pady = 5)
 
         self.clearGridBtn = tk.Button(self.frm, text="Enter Name", command=self.getName)
-        self.clearGridBtn.grid(row=2, column=3, pady = 5)
+        self.clearGridBtn.grid(row=2, column=3, pady = 15)
 
-        self.optionsunoBtn = tk.Button(self.leftfrm, text="From Directory", command=self.findDirectory)
-        self.optionsunoBtn.grid(row=2, column=1, pady = 5)
+        self.optionsunoBtn = tk.Button(self.frm, text="From Directory", command=self.findDirectory)
+        self.optionsunoBtn.grid(row=3, column=1, pady = 5)
 
-        self.JSONBtn = tk.Button(self.rightfrm, text="Make JSON", command=self.makeJson)
-        self.JSONBtn.grid(row=2, column=1, pady = 5)
+        self.JSONBtn = tk.Button(self.frm, text="Make JSON", command=self.makeJson)
+        self.JSONBtn.grid(row=3, column=12, pady = 5)
 
-        self.simpleBtn = tk.Button(self.rightfrm, text="JSON Entries", command=self.makeJsonEntries)
-        self.simpleBtn.grid(row=3, column=1, pady = 5)
+        self.simpleBtn = tk.Button(self.frm, text="JSON Entries", command=self.makeJsonEntries)
+        self.simpleBtn.grid(row=4, column=12, pady = 5)
 
-        self.clearGridBtn = tk.Button(self.rightfrm, text="Clear Grid", command=self.clearGrid)
-        self.clearGridBtn.grid(row=1, column=2, pady = 5)
+        self.clearGridBtn = tk.Button(self.frm, text="Clear Grid", command=self.clearGrid)
+        self.clearGridBtn.grid(row=7, column=1, pady = 5)
 
-        self.clearGridBtn = tk.Button(self.leftfrm, text="test vars", command=self.testVar)
-        self.clearGridBtn.grid(row=6, column=1, pady = 5)
+        self.clearGridBtn = tk.Button(self.frm, text="test vars", command=self.testVar)
+        self.clearGridBtn.grid(row=9, column=1, pady = 5)
 
         self.DBNameBtn = tk.Button(self.frm, text="DB Name", command=self.nameDB)
-        self.DBNameBtn.grid(row=2, column=6, pady = 5)
+        self.DBNameBtn.grid(row=2, column=7, pady = 15)
 
-        self.EditDBBtn = tk.Button(self.rightfrm, text="Edit DB", command=self.editDBWindow)
-        self.EditDBBtn.grid(row=2, column=2, pady = 5)
+        self.EditDBBtn = tk.Button(self.frm, text="Edit DB", command=self.editDBWindow)
+        self.EditDBBtn.grid(row=6, column=12, pady = 5)
 
-        self.clearJSONBtn = tk.Button(self.leftfrm, text="Clear JSON", command=self.ClearJSON)
-        self.clearJSONBtn.grid(row=3, column=1, pady = 5)
+        self.clearJSONBtn = tk.Button(self.frm, text="Clear JSON", command=self.ClearJSON)
+        self.clearJSONBtn.grid(row=5, column=1, pady = 5)
 
-        self.clearCSVBtn = tk.Button(self.leftfrm, text="Clear CSV", command=self.ClearCSV)
-        self.clearCSVBtn.grid(row=4, column=1, pady = 5)
+        self.clearCSVBtn = tk.Button(self.frm, text="Clear CSV", command=self.ClearCSV)
+        self.clearCSVBtn.grid(row=6, column=1, pady = 5)
 
-        self.copyLinkBtn = tk.Button(self.rightfrm, text="Copy URL", command=self.copy_info)
-        self.copyLinkBtn.grid(row=3, column=2, pady = 5)
+        self.copyLinkBtn = tk.Button(self.frm, text="Copy URL", command=self.copy_info)
+        self.copyLinkBtn.grid(row=8, column=12, pady = 5)
 
-        self.ShowDBBtn = tk.Button(self.rightfrm, text="Show DB", command=self.showDB)
-        self.ShowDBBtn.grid(row=4, column=1, pady = 5)
+        self.ShowDBBtn = tk.Button(self.frm, text="Show DB", command=self.showDB)
+        self.ShowDBBtn.grid(row=7, column=12, pady = 5)
 
-        self.removeEntryBtn = tk.Button(self.rightfrm, text="Delete Entry!", command=self.deleteEntry)
-        self.removeEntryBtn.grid(row=5, column=1, pady = 5)
+        self.removeEntryBtn = tk.Button(self.frm, text="Delete Entry!", command=self.deleteEntry)
+        self.removeEntryBtn.grid(row=8, column=1, pady = 5)
 
     # function to handle event that the user enters the RSS URL in textbox
     def enterURL(self):
@@ -204,7 +198,6 @@ class Application(tk.Frame):
 
             indexValue = self.enterString.get()
             self.js.readFromJson(indexValue)
-            # print('Find directory activated!')
             self.clearTextbox()
 
     # function to get Database name from User
@@ -282,7 +275,7 @@ class Application(tk.Frame):
         self.style.layout("Treeview", [("Treeview.treearea", {'sticky':'nswe'})])
         self.style.configure("Treeview.Heading", foreground='green', font='bold', stretch=tk.YES)
 
-        self.tv.grid(row=10, column=2, columnspan=10, rowspan=6, pady=5, padx=10)
+        self.tv.grid(row=3, column=2, columnspan=10, rowspan=6, pady=5, padx=10)
 
         self.tv.heading(1, text="Index")
         self.tv.column("1", minwidth=0, width=50, stretch=NO)
