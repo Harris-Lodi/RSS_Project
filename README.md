@@ -2,14 +2,15 @@
  A Python project to get RSS Feeds without needing a terminal, convenient for windows users!
 
  <b>Requirements:</b> <br />
-
- feedparser - pip3 install feedparser<br />
- pandas - pip3 install pandas<br />
- sqlite3 - pip3 install pysqlite3<br />
- pyperclip - pip install pyperclip<br />
- Beautiful Soup 4 - pip install beautifulsoup4<br />
+ 
+ Python 3.8.5 or above <br />
+ feedparser - pip3 install feedparser - https://pypi.org/project/feedparser/<br />
+ pandas - pip3 install pandas - https://pypi.org/project/pandas/<br />
+ sqlite3 - pip3 install pysqlite3 - https://docs.python.org/3/library/sqlite3.html<br />
+ pyperclip - pip install pyperclip - https://pypi.org/project/pyperclip/<br />
+ Beautiful Soup 4 - pip install beautifulsoup4 - https://pypi.org/project/beautifulsoup4/<br />
  Path - pip install pathlib - https://pypi.org/project/pathlib/<br />
- Shutil - pip install shutil<br />
+ Shutil - pip install shutil - https://docs.python.org/3/library/shutil.html<br />
 
  <b>Credits</b><br />
 
@@ -27,12 +28,12 @@
  entry = NewsFeed.entries[#] will assign a specific article/item/entry to the variable entry<br />
  entry.keys() will out the html tags for that specific entry<br />
 
- <b> Haitus Update: (Back from Haitus!)</b><br />
-
- Need to make static variables that can be set from GUI and Get from backend and front end as well.<br />
- This will require rewriting the entire back end into a class, and initializing the variables in an init function.<br />
- Also need to re-write the front end to work with the new back end and remove all redundant functions and code from the project.<br />
- This is a lot of work, thus this project is in haitus until I have enough time to come back to it(until further notice)!<br />
+ <b>Creating the .exe:</b><br />
+ - Open CMD prompt as admin in the project folder in windows!
+ - ensure pip is installed and python version is atleast 3.8.5 or higher (for current build 3.8.5 is ideal)!
+ - run 'pip install pyinstaller'
+ - to build the executable: run 'pyinstaller --onefile --windowed --icon="Icons/RSS_Icon.ico" main.py'
+ - after it runs, delete 'binaries' folder, 'main.spec' file, and move executable to the main directory and delete 'dist' folder to keep it tidy
  
  <b>Program Features List:</b><br />
  <ul>
@@ -47,5 +48,13 @@
   <li> Have buttons to update, read, and delete entries after a row is focused on and pushing the corresponding button </li>
   <li> Have a box to show summary, title, and date upon left clicking the entry in list box </li>
   <li> Also have displays that show all the other info that is in the header related to the RSS page </li>
+ </ul><br />
+
+ <b>TO DO List:</b><br />
+ <ul>
+  <li> Make the program clear Databases folder when there is more then one Database, currently can only delete the database when there is only one DB! </li>
+  <li> Add functionality to the 'Find Directory' function to select database and table by name when button is clicked, need to update table in GUI as well! </li>
+  <li> Add functionaltiy to add new entries to all relevant Databases when new entries are found in RSS Feed, need to make the whole process more automated as well! </li>
+  <li> Need to create a new list box and database file to store header data from RSS feed about the feed itself, not just the entries data! </li>
  </ul><br />
 

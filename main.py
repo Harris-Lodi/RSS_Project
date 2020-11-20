@@ -4,7 +4,7 @@ from tkinter import messagebox, Listbox, Label, GROOVE, CENTER, Entry, END, NO, 
 from tkinter import ttk
 import pyperclip
 
-# test RSS source: https://lukesmith.xyz/rss.xml
+# test RSS source: https://www.nasdaq.com/feed/rssoutbound?symbol=AMD
 
 # region variables
 
@@ -69,7 +69,7 @@ class Application(tk.Frame):
         self.spaceFrame = tk.Label(self.frm, text="Create Databases!", relief=GROOVE, anchor=CENTER, font = 'Times 12 italic', bg = '#424242', fg = '#FFFFFF')
         self.spaceFrame.grid(row = 1, column = 12, columnspan=3, pady = 5, ipadx = 10)
 
-        self.spaceFrame = tk.Label(self.frm, text="Clear DataBases!", relief=GROOVE, anchor=CENTER, font = 'Times 12 italic', bg = '#424242', fg = '#FFFFFF')
+        self.spaceFrame = tk.Label(self.frm, text="Delete Files!", relief=GROOVE, anchor=CENTER, font = 'Times 12 italic', bg = '#424242', fg = '#FFFFFF')
         self.spaceFrame.grid(row = 1, column = 1, columnspan=1, pady = 5, ipadx = 10, padx=40)
 
         self.optionListbox = Listbox(self.frm, bg = '#D8D8D8', height="25", width=150, border=0)
@@ -101,8 +101,9 @@ class Application(tk.Frame):
         self.clearGridBtn = tk.Button(self.frm, text="Table Name", command=self.getName)
         self.clearGridBtn.grid(row=2, column=3, pady = 15)
 
-        self.optionsunoBtn = tk.Button(self.frm, text="From Directory", command=self.findDirectory)
-        self.optionsunoBtn.grid(row=3, column=1, pady = 5)
+        # need to expand the functionality to work with multiple tables in the same DB before using this function in the full build!
+        # self.optionsunoBtn = tk.Button(self.frm, text="From Directory", command=self.findDirectory)
+        # self.optionsunoBtn.grid(row=8, column=1, pady = 5)
 
         self.JSONBtn = tk.Button(self.frm, text="Make JSON", command=self.makeJson)
         self.JSONBtn.grid(row=3, column=12, pady = 5)
@@ -113,8 +114,9 @@ class Application(tk.Frame):
         self.clearGridBtn = tk.Button(self.frm, text="Clear Grid", command=self.clearGrid)
         self.clearGridBtn.grid(row=7, column=1, pady = 5)
 
-        self.clearGridBtn = tk.Button(self.frm, text="test vars", command=self.testVar)
-        self.clearGridBtn.grid(row=9, column=1, pady = 5)
+        # delete this button and all it's functions when the project is fully complete, this is for testing only!
+        # self.clearGridBtn = tk.Button(self.frm, text="test vars", command=self.testVar)
+        # self.clearGridBtn.grid(row=9, column=1, pady = 5)
 
         self.DBNameBtn = tk.Button(self.frm, text="DB Name", command=self.nameDB)
         self.DBNameBtn.grid(row=2, column=7, pady = 15)
@@ -135,19 +137,19 @@ class Application(tk.Frame):
         self.ShowDBBtn.grid(row=7, column=12, pady = 5)
 
         self.removeEntryBtn = tk.Button(self.frm, text="Delete Entry!", command=self.deleteEntry)
-        self.removeEntryBtn.grid(row=8, column=1, pady = 5)
+        self.removeEntryBtn.grid(row=3, column=1, pady = 5)
 
         self.spaceFrame = tk.Label(self.frm, text="Instructions:", relief=GROOVE, anchor=CENTER, font = 'Times 12 italic', bg = '#424242', fg = '#FFFFFF')
         self.spaceFrame.grid(row = 18, column = 3, columnspan=9, pady = 5, ipadx = 10)
 
         self.spaceFrame = tk.Label(self.frm, text="Enter names for Database, Table, and the URL for RSS Feed using the first three buttons in the top row!", relief=GROOVE, anchor=CENTER, font = 'Times 12', bg = '#424242', fg = '#FFFFFF')
-        self.spaceFrame.grid(row = 19, column = 3, columnspan=9, pady = 5, ipadx = 10)
+        self.spaceFrame.grid(row = 19, column = 3, columnspan=9, pady = 2, ipadx = 10)
 
         self.spaceFrame = tk.Label(self.frm, text="After the names/URL are inserted, Click on the right side, then 'Make JSON', then 'JSON Entries', and then 'Create DB' in order to show the entries in the RSS Feed!", relief=GROOVE, anchor=CENTER, font = 'Times 12', bg = '#424242', fg = '#FFFFFF')
-        self.spaceFrame.grid(row = 20, column = 3, columnspan=9, pady = 5, ipadx = 10)
+        self.spaceFrame.grid(row = 20, column = 3, columnspan=9, pady = 2, ipadx = 10)
 
         self.spaceFrame = tk.Label(self.frm, text="Use 'Find Directory' button to get the main.JSON file from another table name inserted if you want to select another table, the rest of the buttons can be figured out by testing them manually!", relief=GROOVE, anchor=CENTER, font = 'Times 12', bg = '#424242', fg = '#FFFFFF')
-        self.spaceFrame.grid(row = 21, column = 1, columnspan=17, pady = 5, ipadx = 10)
+        self.spaceFrame.grid(row = 21, column = 1, columnspan=17, pady = 2, ipadx = 10)
 
     # function to handle event that the user enters the RSS URL in textbox
     def enterURL(self):
@@ -271,7 +273,7 @@ class Application(tk.Frame):
         self.tv.grid_remove()
         self.optionListbox.grid_remove()
         self.SummaryBox.delete("1.0","end")
-        self.optionListbox.grid(row=10, column=0, columnspan=10, rowspan=6, pady=5, padx=10)
+        self.optionListbox.grid(row=3, column=2, columnspan=10, rowspan=6, pady=5, padx=10)
 
     # function to display content from db
     def showDB(self):
