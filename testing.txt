@@ -1,0 +1,3 @@
+Testing new Git clone method on new OS!
+
+Testing 123
