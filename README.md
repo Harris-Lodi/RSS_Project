@@ -60,5 +60,6 @@
   <li> Add functionality to the 'Find Directory' function to select database and table by name when button is clicked, need to update table in GUI as well! </li>
   <li> Add functionaltiy to add new entries to all relevant Databases when new entries are found in RSS Feed, need to make the whole process more automated as well! </li>
   <li> Need to create a new list box and database file to store header data from RSS feed about the feed itself, not just the entries data! </li>
+ <li> Need to change the tkinter icon line to make it functional with Linux, the tkinter iconbitman function seems to be bugged for Linux OS! </li>
  </ul><br />
 
