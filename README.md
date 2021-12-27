@@ -11,6 +11,10 @@
  Beautiful Soup 4 - pip install beautifulsoup4 - https://pypi.org/project/beautifulsoup4/<br />
  Path - pip install pathlib - https://pypi.org/project/pathlib/<br />
  Shutil - pip install shutil - https://docs.python.org/3/library/shutil.html<br />
+ 
+ On Linux:
+ 
+ tkinter: sudo apt-get install python3-tk
 
  <b>Credits</b><br />
 
