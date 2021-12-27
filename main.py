@@ -1,6 +1,8 @@
+#! /usr/bin/python3
+
 from Json import *
 import tkinter as tk
-from tkinter import messagebox, Listbox, Label, GROOVE, CENTER, Entry, END, NO, YES, Text, LEFT, RIGHT, BOTTOM, TOP
+from tkinter import messagebox, Listbox, Label, GROOVE, CENTER, Entry, END, NO, YES, Text, LEFT, RIGHT, BOTTOM, TOP, PhotoImage
 from tkinter import ttk
 import pyperclip
 
@@ -42,7 +44,8 @@ class Application(tk.Frame):
         # change background color of root, color from https://html-color-codes.info/
         master.configure(bg = "#585858")
         # set title bar icon
-        master.iconbitmap('Icons/RSS_Icon.ico')
+        # master.iconbitmap('Icons/RSS_Icon.ico')
+        # master.iconbitmap("Icons/RSS_Icon.xbm")
         
         # Create widgets/grid
         self.create_widgets()
